@@ -27,32 +27,32 @@ import { MatMenuModule } from '@angular/material/menu';
         <mat-nav-list>
           <h3 mat-subheader>Visitor Management</h3>
           <a mat-list-item routerLink="/visitor/log" routerLinkActive="active">
-            <mat-icon>people</mat-icon>
-            <span>Visitor Log</span>
+            <mat-icon matListItemIcon>people</mat-icon>
+            <span matListItemTitle>Visitor Log</span>
           </a>
           <a mat-list-item routerLink="/visitor/approval" routerLinkActive="active">
-            <mat-icon>check_circle</mat-icon>
-            <span>Visitor Approval</span>
+            <mat-icon matListItemIcon>check_circle</mat-icon>
+            <span matListItemTitle>Visitor Approval</span>
           </a>
 
           <mat-divider></mat-divider>
 
           <h3 mat-subheader>Parcel Management</h3>
           <a mat-list-item routerLink="/parcel/log" routerLinkActive="active">
-            <mat-icon>inventory_2</mat-icon>
-            <span>Parcel Log</span>
+            <mat-icon matListItemIcon>inventory_2</mat-icon>
+            <span matListItemTitle>Parcel Log</span>
           </a>
           <a mat-list-item routerLink="/parcel/tracking" routerLinkActive="active">
-            <mat-icon>local_shipping</mat-icon>
-            <span>Parcel Tracking</span>
+            <mat-icon matListItemIcon>local_shipping</mat-icon>
+            <span matListItemTitle>Parcel Tracking</span>
           </a>
 
           <mat-divider></mat-divider>
 
           <h3 mat-subheader>Administration</h3>
           <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
-            <mat-icon>dashboard</mat-icon>
-            <span>Dashboard</span>
+            <mat-icon matListItemIcon>dashboard</mat-icon>
+            <span matListItemTitle>Dashboard</span>
           </a>
         </mat-nav-list>
       </mat-sidenav>
@@ -101,11 +101,12 @@ import { MatMenuModule } from '@angular/material/menu';
       font-weight: 500;
     }
 
-    .sidenav a {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
+    .sidenav a.mat-mdc-list-item {
+      height: 48px;
+    }
+
+    .sidenav a mat-icon {
+      margin-right: 16px;
     }
 
     .sidenav a.active {

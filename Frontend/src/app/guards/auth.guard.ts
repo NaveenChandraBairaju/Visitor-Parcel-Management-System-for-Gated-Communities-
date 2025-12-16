@@ -1,16 +1,6 @@
-import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
+import { CanActivateFn } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router);
-  
-  // Check if user is authenticated (basic implementation)
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  
-  if (!isAuthenticated) {
-    router.navigate(['/login']);
-    return false;
-  }
-  
+// Day-2: Basic guard - returns true (no logic yet)
+export const authGuard: CanActivateFn = () => {
   return true;
 };

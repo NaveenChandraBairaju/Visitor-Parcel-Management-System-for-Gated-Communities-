@@ -4,6 +4,7 @@ import { roleGuard } from './guards/role.guard';
 import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
+  // Public routes
   {
     path: 'login',
     loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)
@@ -12,6 +13,7 @@ export const routes: Routes = [
     path: 'unauthorized',
     loadComponent: () => import('./unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
+  // Protected routes with layout
   {
     path: '',
     component: LayoutComponent,
@@ -20,36 +22,31 @@ export const routes: Routes = [
       {
         path: 'visitor/log',
         loadComponent: () => import('./visitor-log/visitor-log.component').then(m => m.VisitorLogComponent),
-        canActivate: [roleGuard],
-        data: { roles: ['admin', 'security', 'resident'] }
+        canActivate: [roleGuard]
       },
       {
         path: 'visitor/approval',
         loadComponent: () => import('./visitor-approval/visitor-approval.component').then(m => m.VisitorApprovalComponent),
-        canActivate: [roleGuard],
-        data: { roles: ['admin', 'security'] }
+        canActivate: [roleGuard]
       },
       {
         path: 'parcel/log',
         loadComponent: () => import('./parcel-log/parcel-log.component').then(m => m.ParcelLogComponent),
-        canActivate: [roleGuard],
-        data: { roles: ['admin', 'security', 'resident'] }
+        canActivate: [roleGuard]
       },
       {
         path: 'parcel/tracking',
         loadComponent: () => import('./parcel-tracking/parcel-tracking.component').then(m => m.ParcelTrackingComponent),
-        canActivate: [roleGuard],
-        data: { roles: ['admin', 'security', 'resident'] }
+        canActivate: [roleGuard]
       },
       {
         path: 'admin/dashboard',
         loadComponent: () => import('./admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        canActivate: [roleGuard]
       },
       {
         path: '',
-        redirectTo: '/admin/dashboard',
+        redirectTo: 'admin/dashboard',
         pathMatch: 'full'
       }
     ]

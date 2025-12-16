@@ -1,0 +1,37 @@
+<div class="container">
+  <h2>Parcel Tracking</h2>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>My Parcels</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="parcels">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Parcel Name</th>
+          <td mat-cell *matCellDef="let p">{{p.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="receivedDate">
+          <th mat-header-cell *matHeaderCellDef>Received Date</th>
+          <td mat-cell *matCellDef="let p">{{p.receivedDate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let p">
+            <span [class]="'status-' + p.status.toLowerCase()">{{p.status}}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let p">
+            @if (p.status === 'Received') {
+              <button mat-raised-button color="primary" (click)="acknowledgeParcel(p)">Acknowledge</button>
+            }
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,43 @@
+<div class="layout-container">
+  <!-- Top Navbar -->
+  <nav class="top-navbar resident-nav">
+    <div class="nav-left">
+      <div class="brand">
+        <mat-icon>family_restroom</mat-icon>
+        <span>Resident Portal</span>
+      </div>
+    </div>
+    <div class="nav-center">
+      <a routerLink="/resident/visitor-approval" routerLinkActive="active" mat-button>
+        <mat-icon>how_to_reg</mat-icon>
+        Visitor Approval
+      </a>
+      <a routerLink="/resident/parcel-tracking" routerLinkActive="active" mat-button>
+        <mat-icon>inventory_2</mat-icon>
+        My Parcels
+      </a>
+      <a routerLink="/resident/history" routerLinkActive="active" mat-button>
+        <mat-icon>history</mat-icon>
+        History
+      </a>
+    </div>
+    <div class="nav-right">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/">
+          <mat-icon>home</mat-icon>Home
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>Logout
+        </button>
+      </mat-menu>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

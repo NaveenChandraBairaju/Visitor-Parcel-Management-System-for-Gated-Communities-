@@ -1,0 +1,17 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}

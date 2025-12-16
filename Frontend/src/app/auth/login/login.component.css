@@ -1,0 +1,260 @@
+.login-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-left {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+  color: #1a1a3a;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.brand mat-icon {
+  color: #ffd700;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.login-left h1 {
+  font-size: 36px;
+  color: #1a1a3a;
+  margin: 0 0 10px;
+}
+
+.login-left > p {
+  color: #666;
+  margin: 0 0 40px;
+}
+
+.login-form {
+  max-width: 400px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #f5f7fa;
+  border-radius: 12px;
+  padding: 0 16px;
+  margin-bottom: 20px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.input-group:focus-within {
+  border-color: #4facfe;
+}
+
+.input-group mat-icon {
+  color: #999;
+  margin-right: 12px;
+}
+
+.input-group input {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 16px 0;
+  font-size: 16px;
+  outline: none;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+}
+
+.role-select {
+  margin-bottom: 30px;
+}
+
+.role-select label {
+  display: block;
+  color: #666;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.role-options {
+  display: flex;
+  gap: 12px;
+}
+
+.role-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.role-option input {
+  display: none;
+}
+
+.role-option mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.role-option span {
+  font-size: 13px;
+  color: #666;
+}
+
+.role-option.selected {
+  border-color: #4facfe;
+  background: rgba(79, 172, 254, 0.1);
+}
+
+.role-option.selected mat-icon {
+  color: #4facfe;
+}
+
+.role-option.selected span {
+  color: #4facfe;
+  font-weight: 600;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+}
+
+.signup-link {
+  margin-top: 30px;
+  color: #666;
+}
+
+.signup-link a {
+  color: #4facfe;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-right {
+  flex: 1;
+  background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+}
+
+.c1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  top: 10%;
+  right: -100px;
+}
+
+.c2 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  bottom: 10%;
+  left: -50px;
+}
+
+.c3 {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #fa709a, #fee140);
+  top: 50%;
+  left: 30%;
+}
+
+.info-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.info-box mat-icon {
+  font-size: 60px;
+  width: 60px;
+  height: 60px;
+  color: #ffd700;
+  margin-bottom: 20px;
+}
+
+.info-box h3 {
+  font-size: 24px;
+  margin: 0 0 10px;
+}
+
+.info-box p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .login-right {
+    display: none;
+  }
+  .login-left {
+    padding: 40px 20px;
+  }
+}

@@ -1,0 +1,108 @@
+<div class="auth-container">
+  <div class="auth-banner">
+    <div class="banner-content">
+      <h2>Join Our Community</h2>
+      <p>Register to manage visitors and parcels efficiently</p>
+      <div class="features">
+        <div class="feature">
+          <mat-icon>people</mat-icon>
+          <span>Visitor Management</span>
+        </div>
+        <div class="feature">
+          <mat-icon>inventory_2</mat-icon>
+          <span>Parcel Tracking</span>
+        </div>
+        <div class="feature">
+          <mat-icon>security</mat-icon>
+          <span>Enhanced Security</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo">
+        <mat-icon>person_add</mat-icon>
+      </div>
+      <h1>Create Account</h1>
+      <p>Register for Visitor & Parcel Management System</p>
+    </div>
+
+    <form class="auth-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput [(ngModel)]="fullName" name="fullName">
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" type="email">
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput [(ngModel)]="phone" name="phone">
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Flat/Unit Number</mat-label>
+          <input matInput [(ngModel)]="flatNumber" name="flatNumber">
+          <mat-icon matPrefix>home</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="role" name="role">
+          <mat-option value="resident">Resident</mat-option>
+          <mat-option value="security">Security Guard</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>badge</mat-icon>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [(ngModel)]="password" name="password" [type]="hidePassword ? 'password' : 'text'">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'">
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <mat-checkbox class="terms-checkbox">
+        I agree to the <a href="#">Terms & Conditions</a>
+      </mat-checkbox>
+
+      <button mat-raised-button color="primary" class="auth-btn" (click)="signup()">
+        Create Account
+      </button>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <p class="switch-auth">
+        Already have an account? <a routerLink="/login">Sign In</a>
+      </p>
+    </form>
+  </div>
+</div>

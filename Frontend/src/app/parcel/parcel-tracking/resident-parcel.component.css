@@ -1,0 +1,23 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+}
+
+.status-received {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.status-acknowledged {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.status-collected {
+  color: #4caf50;
+  font-weight: bold;
+}

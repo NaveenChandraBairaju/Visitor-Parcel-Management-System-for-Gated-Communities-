@@ -1,0 +1,98 @@
+<div class="resident-home">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>Welcome back, {{userName}}! 👋</h1>
+      <p>Manage your visitors and parcels from your personal dashboard</p>
+    </div>
+    <div class="welcome-graphic">
+      <mat-icon>home</mat-icon>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card pending">
+      <mat-icon>hourglass_empty</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{pendingVisitors}}</span>
+        <span class="stat-label">Pending Approvals</span>
+      </div>
+    </div>
+    <div class="stat-card parcels">
+      <mat-icon>inventory_2</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{pendingParcels}}</span>
+        <span class="stat-label">Parcels to Collect</span>
+      </div>
+    </div>
+    <div class="stat-card today">
+      <mat-icon>groups</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{todayVisitors}}</span>
+        <span class="stat-label">Today's Visitors</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <h2>Quick Actions</h2>
+  <div class="actions-grid">
+    <a routerLink="/resident/visitor-approval" class="action-card">
+      <div class="action-icon visitor-icon">
+        <mat-icon>how_to_reg</mat-icon>
+      </div>
+      <h3>Visitor Approval</h3>
+      <p>Approve or reject visitors waiting at the gate</p>
+      <span class="action-btn">Go to Approvals →</span>
+    </a>
+    <a routerLink="/resident/parcel-tracking" class="action-card">
+      <div class="action-icon parcel-icon">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+      <h3>Parcel Tracking</h3>
+      <p>Track and acknowledge your parcel deliveries</p>
+      <span class="action-btn">View Parcels →</span>
+    </a>
+    <a routerLink="/resident/history" class="action-card">
+      <div class="action-icon history-icon">
+        <mat-icon>history</mat-icon>
+      </div>
+      <h3>Visit History</h3>
+      <p>View complete history of all visitors</p>
+      <span class="action-btn">View History →</span>
+    </a>
+  </div>
+
+  <!-- Recent Activity -->
+  <h2>Recent Activity</h2>
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="activity-icon approved">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Visitor Approved - Rajesh Kumar</span>
+        <span class="activity-time">Today, 10:30 AM</span>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon parcel">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Parcel Received - Amazon Package</span>
+        <span class="activity-time">Today, 9:15 AM</span>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon rejected">
+        <mat-icon>cancel</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Visitor Rejected - Unknown Person</span>
+        <span class="activity-time">Yesterday, 4:45 PM</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/resident-layout/resident-layout.component').then(m => m.ResidentLayoutComponent),
     children: [
       {
+        path: 'home',
+        loadComponent: () => import('./resident/resident-home/resident-home.component').then(m => m.ResidentHomeComponent)
+      },
+      {
         path: 'visitor-approval',
         loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
       },
@@ -33,7 +37,7 @@ export const routes: Routes = [
         path: 'history',
         loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
       },
-      { path: '', redirectTo: 'visitor-approval', pathMatch: 'full' }
+      { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
   // Security Guard Portal

@@ -46,6 +46,10 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/security-layout/security-layout.component').then(m => m.SecurityLayoutComponent),
     children: [
       {
+        path: 'home',
+        loadComponent: () => import('./security/security-home/security-home.component').then(m => m.SecurityHomeComponent)
+      },
+      {
         path: 'visitor-log',
         loadComponent: () => import('./visitor/visitor-log/visitor-log.component').then(m => m.VisitorLogComponent)
       },
@@ -61,7 +65,7 @@ export const routes: Routes = [
         path: 'all-parcels',
         loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
       },
-      { path: '', redirectTo: 'visitor-log', pathMatch: 'full' }
+      { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
   // Admin Portal
@@ -75,7 +79,7 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () => import('./admin/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+        loadComponent: () => import('./admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent)
       },
       {
         path: 'visitors',
@@ -84,10 +88,6 @@ export const routes: Routes = [
       {
         path: 'parcels',
         loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
-      },
-      {
-        path: 'reports',
-        loadComponent: () => import('./admin/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

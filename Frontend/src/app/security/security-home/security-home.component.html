@@ -1,0 +1,98 @@
+<div class="security-home">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>Welcome, {{userName}}! 🛡️</h1>
+      <p>Manage visitor entries and parcel deliveries at the gate</p>
+    </div>
+    <div class="welcome-graphic">
+      <mat-icon>security</mat-icon>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card visitors">
+      <mat-icon>groups</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{todayVisitors}}</span>
+        <span class="stat-label">Today's Visitors</span>
+      </div>
+    </div>
+    <div class="stat-card parcels">
+      <mat-icon>inventory_2</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{todayParcels}}</span>
+        <span class="stat-label">Today's Parcels</span>
+      </div>
+    </div>
+    <div class="stat-card pending">
+      <mat-icon>pending_actions</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{pendingEntry}}</span>
+        <span class="stat-label">Pending Entry</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <h2>Quick Actions</h2>
+  <div class="actions-grid">
+    <a routerLink="/security/visitor-log" class="action-card">
+      <div class="action-icon visitor-icon">
+        <mat-icon>person_add</mat-icon>
+      </div>
+      <h3>Log New Visitor</h3>
+      <p>Register a new visitor at the gate</p>
+      <span class="action-btn">Add Visitor →</span>
+    </a>
+    <a routerLink="/security/parcel-log" class="action-card">
+      <div class="action-icon parcel-icon">
+        <mat-icon>add_box</mat-icon>
+      </div>
+      <h3>Log New Parcel</h3>
+      <p>Record a new parcel delivery</p>
+      <span class="action-btn">Add Parcel →</span>
+    </a>
+    <a routerLink="/security/all-visitors" class="action-card">
+      <div class="action-icon list-icon">
+        <mat-icon>list_alt</mat-icon>
+      </div>
+      <h3>View All Visitors</h3>
+      <p>See complete visitor records</p>
+      <span class="action-btn">View List →</span>
+    </a>
+  </div>
+
+  <!-- Recent Activity -->
+  <h2>Recent Activity</h2>
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="activity-icon entry">
+        <mat-icon>login</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Visitor Entry - Rajesh Kumar</span>
+        <span class="activity-time">Today, 10:30 AM</span>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon parcel">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Parcel Logged - Amazon Package for A-101</span>
+        <span class="activity-time">Today, 9:45 AM</span>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon exit">
+        <mat-icon>logout</mat-icon>
+      </div>
+      <div class="activity-info">
+        <span class="activity-title">Visitor Exit - Delivery Person</span>
+        <span class="activity-time">Today, 9:15 AM</span>
+      </div>
+    </div>
+  </div>
+</div>

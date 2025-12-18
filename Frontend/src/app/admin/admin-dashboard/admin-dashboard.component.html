@@ -1,32 +1,136 @@
-<div class="container">
-  <h2>Admin Dashboard</h2>
+<div class="admin-dashboard">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>Welcome, {{adminName}}! 🏢</h1>
+      <p>Manage your community from the admin control center</p>
+    </div>
+    <div class="welcome-graphic">
+      <mat-icon>admin_panel_settings</mat-icon>
+    </div>
+  </div>
 
-  <div class="cards">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Total Visitors</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <h1>{{totalVisitors}}</h1>
-      </mat-card-content>
-    </mat-card>
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card residents">
+      <mat-icon>apartment</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{totalResidents}}</span>
+        <span class="stat-label">Total Residents</span>
+      </div>
+    </div>
+    <div class="stat-card visitors">
+      <mat-icon>groups</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{totalVisitors}}</span>
+        <span class="stat-label">Total Visitors</span>
+      </div>
+    </div>
+    <div class="stat-card parcels">
+      <mat-icon>inventory_2</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{totalParcels}}</span>
+        <span class="stat-label">Total Parcels</span>
+      </div>
+    </div>
+    <div class="stat-card guards">
+      <mat-icon>security</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{activeGuards}}</span>
+        <span class="stat-label">Active Guards</span>
+      </div>
+    </div>
+  </div>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Total Parcels</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <h1>{{totalParcels}}</h1>
-      </mat-card-content>
-    </mat-card>
+  <!-- Quick Actions -->
+  <h2>Quick Actions</h2>
+  <div class="actions-grid">
+    <a routerLink="/admin/users" class="action-card">
+      <div class="action-icon users-icon">
+        <mat-icon>manage_accounts</mat-icon>
+      </div>
+      <h3>Manage Users</h3>
+      <p>Add, edit, or remove residents and guards</p>
+      <span class="action-btn">Manage Users →</span>
+    </a>
+    <a routerLink="/admin/visitors" class="action-card">
+      <div class="action-icon visitor-icon">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <h3>All Visitors</h3>
+      <p>View complete visitor records</p>
+      <span class="action-btn">View Visitors →</span>
+    </a>
+    <a routerLink="/admin/parcels" class="action-card">
+      <div class="action-icon parcel-icon">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+      <h3>All Parcels</h3>
+      <p>Track all parcel deliveries</p>
+      <span class="action-btn">View Parcels →</span>
+    </a>
+  </div>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Pending Approvals</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <h1>{{pendingApprovals}}</h1>
-      </mat-card-content>
-    </mat-card>
+  <!-- Bottom Section -->
+  <div class="bottom-section">
+    <div class="alerts-section">
+      <h2>Alerts & Notifications</h2>
+      <div class="alerts-list">
+        <div class="alert-item warning">
+          <mat-icon>warning</mat-icon>
+          <div class="alert-info">
+            <span class="alert-title">{{pendingApprovals}} Pending Visitor Approvals</span>
+            <span class="alert-time">Requires attention</span>
+          </div>
+        </div>
+        <div class="alert-item info">
+          <mat-icon>info</mat-icon>
+          <div class="alert-info">
+            <span class="alert-title">{{todayVisitors}} Visitors Today</span>
+            <span class="alert-time">Updated just now</span>
+          </div>
+        </div>
+        <div class="alert-item success">
+          <mat-icon>check_circle</mat-icon>
+          <div class="alert-info">
+            <span class="alert-title">All Systems Operational</span>
+            <span class="alert-time">Last checked: 5 mins ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-section">
+      <h2>Recent Activity</h2>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon user-add">
+            <mat-icon>person_add</mat-icon>
+          </div>
+          <div class="activity-info">
+            <span class="activity-title">New Resident Added - A-505</span>
+            <span class="activity-time">Today, 11:30 AM</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon guard">
+            <mat-icon>security</mat-icon>
+          </div>
+          <div class="activity-info">
+            <span class="activity-title">Guard Shift Changed - Gate 1</span>
+            <span class="activity-time">Today, 8:00 AM</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon report">
+            <mat-icon>description</mat-icon>
+          </div>
+          <div class="activity-info">
+            <span class="activity-title">Monthly Report Generated</span>
+            <span class="activity-time">Yesterday, 6:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

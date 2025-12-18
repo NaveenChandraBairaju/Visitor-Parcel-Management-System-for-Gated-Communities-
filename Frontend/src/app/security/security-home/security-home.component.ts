@@ -6,18 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-admin-dashboard',
+  selector: 'app-security-home',
   standalone: true,
   imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule],
-  templateUrl: './admin-dashboard.component.html',
-  styleUrl: './admin-dashboard.component.css'
+  templateUrl: './security-home.component.html',
+  styleUrl: './security-home.component.css'
 })
-export class AdminDashboardComponent {
-  adminName = 'Admin';
-  totalResidents = 248;
-  totalVisitors = 1256;
-  totalParcels = 892;
-  activeGuards = 8;
-  pendingApprovals = 12;
-  todayVisitors = 45;
+export class SecurityHomeComponent {
+  userName = 'Security Guard';
+  todayVisitors = 12;
+  todayParcels = 8;
+  pendingEntry = 3;
 }

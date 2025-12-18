@@ -1,37 +1,71 @@
-<div class="container">
-  <h2>Parcel Tracking</h2>
+<div class="parcel-page">
+  <div class="page-header">
+    <div>
+      <h1>Parcel Tracking</h1>
+      <p>Track and manage your parcel deliveries</p>
+    </div>
+  </div>
 
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>My Parcels</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <table mat-table [dataSource]="parcels">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Parcel Name</th>
-          <td mat-cell *matCellDef="let p">{{p.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="receivedDate">
-          <th mat-header-cell *matHeaderCellDef>Received Date</th>
-          <td mat-cell *matCellDef="let p">{{p.receivedDate}}</td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let p">
-            <span [class]="'status-' + p.status.toLowerCase()">{{p.status}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let p">
-            @if (p.status === 'Received') {
-              <button mat-raised-button color="primary" (click)="acknowledgeParcel(p)">Acknowledge</button>
-            }
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
+  <div class="stats-row">
+    <div class="stat-card received">
+      <mat-icon>inventory_2</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{receivedCount}}</span>
+        <span class="stat-label">Received</span>
+      </div>
+    </div>
+    <div class="stat-card acknowledged">
+      <mat-icon>done</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{acknowledgedCount}}</span>
+        <span class="stat-label">Acknowledged</span>
+      </div>
+    </div>
+    <div class="stat-card collected">
+      <mat-icon>check_circle</mat-icon>
+      <div class="stat-info">
+        <span class="stat-num">{{collectedCount}}</span>
+        <span class="stat-label">Collected</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h2>My Parcels</h2>
+    <table mat-table [dataSource]="parcels">
+      <ng-container matColumnDef="courier">
+        <th mat-header-cell *matHeaderCellDef>Courier</th>
+        <td mat-cell *matCellDef="let p">
+          <span class="courier-badge">{{p.courier}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Parcel Name</th>
+        <td mat-cell *matCellDef="let p">{{p.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="receivedDate">
+        <th mat-header-cell *matHeaderCellDef>Received Date</th>
+        <td mat-cell *matCellDef="let p">{{p.receivedDate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let p">
+          <span class="status-badge" [ngClass]="'status-' + p.status.toLowerCase()">{{p.status}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let p">
+          @if (p.status === 'Received') {
+            <button mat-raised-button color="primary" (click)="acknowledgeParcel(p)">Acknowledge</button>
+          }
+          @if (p.status === 'Acknowledged') {
+            <button mat-raised-button color="accent" (click)="collectParcel(p)">Mark Collected</button>
+          }
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 </div>

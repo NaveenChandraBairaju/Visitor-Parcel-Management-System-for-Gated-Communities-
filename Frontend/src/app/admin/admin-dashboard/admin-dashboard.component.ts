@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { VisitorService } from '../../services/visitor.service';
+import { ParcelService } from '../../services/parcel.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,9 +17,24 @@ import { MatIconModule } from '@angular/material/icon';
 export class AdminDashboardComponent {
   adminName = 'Admin';
   totalResidents = 248;
-  totalVisitors = 1256;
-  totalParcels = 892;
+  totalVisitors = 0;
+  totalParcels = 0;
   activeGuards = 8;
-  pendingApprovals = 12;
-  todayVisitors = 45;
+  pendingApprovals = 0;
+  todayVisitors = 0;
+
+  constructor(
+    private visitorService: VisitorService,
+    private parcelService: ParcelService
+  ) {
+    this.visitorService.visitors$.subscribe(list => {
+      this.totalVisitors = list.length;
+      this.pendingApprovals = list.filter(v => v.status === 'pending').length;
+      this.todayVisitors = list.filter(v => v.date === 'Today').length;
+    });
+
+    this.parcelService.parcels$.subscribe(list => {
+      this.totalParcels = list.length;
+    });
+  }
 }

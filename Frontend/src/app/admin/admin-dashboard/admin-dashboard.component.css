@@ -87,7 +87,7 @@ h2 {
 
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 40px;
 }
@@ -126,6 +126,7 @@ h2 {
 .users-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
 .visitor-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
 .parcel-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.announce-icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
 
 .action-card h3 {
   font-size: 18px;

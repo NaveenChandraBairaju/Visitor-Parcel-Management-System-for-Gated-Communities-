@@ -1,0 +1,27 @@
+.frequent-page { max-width: 1100px; margin: 0 auto; }
+.page-header { margin-bottom: 30px; }
+.page-header h1 { font-size: 28px; color: #1e3a5f; margin: 0; }
+.page-header p { font-size: 14px; color: #64748b; margin: 4px 0 0; }
+
+.table-card {
+  background: #fff; border-radius: 16px; padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.table-header h2 { font-size: 20px; color: #1e3a5f; margin: 0; }
+.table-header mat-form-field { width: 250px; }
+
+table { width: 100%; }
+th.mat-header-cell { font-weight: 600; color: #1e3a5f; background: #f8fafc; }
+td.mat-cell { padding: 12px 8px; }
+
+.visitor-info { display: flex; align-items: center; gap: 8px; }
+.visitor-info mat-icon { color: #94a3b8; }
+
+.relation-badge { background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+.visits-count { background: #d1fae5; color: #059669; padding: 4px 10px; border-radius: 8px; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .table-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .table-header mat-form-field { width: 100%; }
+}

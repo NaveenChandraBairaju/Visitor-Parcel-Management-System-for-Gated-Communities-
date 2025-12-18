@@ -1,0 +1,61 @@
+<div class="frequent-page">
+  <div class="page-header">
+    <div>
+      <h1>Frequent Visitors</h1>
+      <p>Manage your regular visitors for quick approvals</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Your Regular Visitors</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchQuery" placeholder="Search by name or relation">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="filteredVisitors">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let v">
+          <div class="visitor-info">
+            <mat-icon>person</mat-icon>
+            <span>{{v.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let v">{{v.phone}}</td>
+      </ng-container>
+      <ng-container matColumnDef="relation">
+        <th mat-header-cell *matHeaderCellDef>Relation</th>
+        <td mat-cell *matCellDef="let v">
+          <span class="relation-badge">{{v.relation}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="visits">
+        <th mat-header-cell *matHeaderCellDef>Total Visits</th>
+        <td mat-cell *matCellDef="let v">
+          <span class="visits-count">{{v.visits}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="lastVisit">
+        <th mat-header-cell *matHeaderCellDef>Last Visit</th>
+        <td mat-cell *matCellDef="let v">{{v.lastVisit}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let v">
+          <button mat-icon-button color="warn" (click)="removeVisitor(v)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="preapproved-page">
+  <div class="page-header">
+    <div>
+      <h1>Pre-Approved Visitors</h1>
+      <p>Expected visitors approved by residents</p>
+    </div>
+    <div class="today-count">
+      <mat-icon>verified_user</mat-icon>
+      <span>{{todayCount}} Expected Today</span>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h2>Expected Visitors List</h2>
+    <table mat-table [dataSource]="preApprovedList">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Visitor Name</th>
+        <td mat-cell *matCellDef="let v">
+          <div class="visitor-info">
+            <mat-icon>verified_user</mat-icon>
+            <span>{{v.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let v">{{v.phone}}</td>
+      </ng-container>
+      <ng-container matColumnDef="flatNumber">
+        <th mat-header-cell *matHeaderCellDef>Visiting Flat</th>
+        <td mat-cell *matCellDef="let v">
+          <div>
+            <strong>{{v.flatNumber}}</strong>
+            <small class="resident-name">{{v.residentName}}</small>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="purpose">
+        <th mat-header-cell *matHeaderCellDef>Purpose</th>
+        <td mat-cell *matCellDef="let v">{{v.purpose}}</td>
+      </ng-container>
+      <ng-container matColumnDef="expectedDate">
+        <th mat-header-cell *matHeaderCellDef>Expected</th>
+        <td mat-cell *matCellDef="let v">
+          <span class="date-badge" [ngClass]="v.expectedDate === 'Today' ? 'today' : 'upcoming'">{{v.expectedDate}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let v">
+          <button mat-raised-button color="primary" (click)="allowEntry(v)">
+            <mat-icon>login</mat-icon> Allow Entry
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

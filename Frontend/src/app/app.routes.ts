@@ -37,6 +37,14 @@ export const routes: Routes = [
         path: 'history',
         loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
       },
+      {
+        path: 'pre-approve',
+        loadComponent: () => import('./resident/pre-approve/pre-approve.component').then(m => m.PreApproveComponent)
+      },
+      {
+        path: 'frequent-visitors',
+        loadComponent: () => import('./resident/frequent-visitors/frequent-visitors.component').then(m => m.FrequentVisitorsComponent)
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
@@ -65,6 +73,14 @@ export const routes: Routes = [
         path: 'all-parcels',
         loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
       },
+      {
+        path: 'visitor-checkout',
+        loadComponent: () => import('./security/visitor-checkout/visitor-checkout.component').then(m => m.VisitorCheckoutComponent)
+      },
+      {
+        path: 'pre-approved',
+        loadComponent: () => import('./security/pre-approved/pre-approved.component').then(m => m.PreApprovedComponent)
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
@@ -88,6 +104,10 @@ export const routes: Routes = [
       {
         path: 'parcels',
         loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
+      },
+      {
+        path: 'announcements',
+        loadComponent: () => import('./admin/announcements/announcements.component').then(m => m.AnnouncementsComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

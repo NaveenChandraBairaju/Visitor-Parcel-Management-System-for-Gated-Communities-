@@ -54,12 +54,20 @@
       <p>Record a new parcel delivery</p>
       <span class="action-btn">Add Parcel →</span>
     </a>
-    <a routerLink="/security/all-visitors" class="action-card">
-      <div class="action-icon list-icon">
-        <mat-icon>list_alt</mat-icon>
+    <a routerLink="/security/visitor-checkout" class="action-card">
+      <div class="action-icon checkout-icon">
+        <mat-icon>logout</mat-icon>
       </div>
-      <h3>View All Visitors</h3>
-      <p>See complete visitor records</p>
+      <h3>Visitor Check-Out</h3>
+      <p>Mark visitor exit from premises</p>
+      <span class="action-btn">Check-Out →</span>
+    </a>
+    <a routerLink="/security/pre-approved" class="action-card">
+      <div class="action-icon preapproved-icon">
+        <mat-icon>verified_user</mat-icon>
+      </div>
+      <h3>Pre-Approved List</h3>
+      <p>View expected visitors today</p>
       <span class="action-btn">View List →</span>
     </a>
   </div>

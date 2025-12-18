@@ -3,29 +3,39 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { VisitorService, Visitor } from '../../services/visitor.service';
 
 @Component({
   selector: 'app-resident-approval',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatTableModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatTableModule, MatIconModule],
   templateUrl: './resident-approval.component.html',
   styleUrl: './resident-approval.component.css'
 })
 export class ResidentApprovalComponent {
   displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'status', 'actions'];
+  visitors: Visitor[] = [];
 
-  visitors = [
-    { id: 1, name: 'Rajesh Kumar', phone: '9876543210', flatNumber: 'A-101', purpose: 'Guest', status: 'pending' },
-    { id: 2, name: 'Meera Patel', phone: '9876543211', flatNumber: 'B-205', purpose: 'Delivery', status: 'pending' },
-    { id: 3, name: 'Suresh Reddy', phone: '9876543212', flatNumber: 'C-302', purpose: 'Maintenance', status: 'approved' },
-    { id: 4, name: 'Anita Sharma', phone: '9876543213', flatNumber: 'A-404', purpose: 'Service', status: 'rejected' }
-  ];
+  // Simulated resident flat (would come from auth)
+  residentFlat = 'A-101';
 
-  approveVisitor(visitor: any) {
-    visitor.status = 'approved';
+  constructor(private visitorService: VisitorService) {
+    this.visitorService.visitors$.subscribe(list => {
+      // Filter for this resident's flat
+      this.visitors = list.filter(v => v.flatNumber === this.residentFlat);
+    });
   }
 
-  rejectVisitor(visitor: any) {
-    visitor.status = 'rejected';
+  get pendingCount() { return this.visitors.filter(v => v.status === 'pending').length; }
+  get approvedCount() { return this.visitors.filter(v => v.status === 'approved' || v.status === 'inside').length; }
+  get rejectedCount() { return this.visitors.filter(v => v.status === 'rejected').length; }
+
+  approveVisitor(visitor: Visitor) {
+    this.visitorService.approveVisitor(visitor.id);
+  }
+
+  rejectVisitor(visitor: Visitor) {
+    this.visitorService.rejectVisitor(visitor.id);
   }
 }

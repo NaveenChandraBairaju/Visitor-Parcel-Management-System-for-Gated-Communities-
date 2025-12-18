@@ -7,42 +7,35 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { VisitorService, Visitor } from '../../services/visitor.service';
 
 @Component({
   selector: 'app-visitor-log',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatTableModule
+    CommonModule, FormsModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, MatCardModule, MatSelectModule, MatTableModule, MatIconModule
   ],
   templateUrl: './visitor-log.component.html',
   styleUrl: './visitor-log.component.css'
 })
 export class VisitorLogComponent {
-  visitor = {
-    name: '',
-    phone: '',
-    purpose: '',
-    flatNumber: '',
-    vehicleNumber: ''
-  };
-
+  visitor = { name: '', phone: '', purpose: '', flatNumber: '', vehicleNumber: '' };
   displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'checkIn'];
+  recentVisitors: Visitor[] = [];
 
-  recentVisitors = [
-    { name: 'Rajesh Kumar', phone: '9876543210', purpose: 'Guest', flatNumber: 'A-101', checkIn: '10:30 AM' },
-    { name: 'Meera Patel', phone: '9876543211', purpose: 'Delivery', flatNumber: 'B-205', checkIn: '11:15 AM' },
-    { name: 'Suresh Reddy', phone: '9876543212', purpose: 'Maintenance', flatNumber: 'C-302', checkIn: '12:00 PM' }
-  ];
+  constructor(private visitorService: VisitorService) {
+    this.visitorService.visitors$.subscribe(list => {
+      this.recentVisitors = list.slice(0, 10);
+    });
+  }
 
   submitVisitor() {
-    console.log('Visitor submitted:', this.visitor);
+    if (this.visitor.name && this.visitor.phone && this.visitor.flatNumber) {
+      this.visitorService.addVisitor(this.visitor);
+      this.clearForm();
+    }
   }
 
   clearForm() {

@@ -18,6 +18,24 @@
 
 mat-form-field { width: 100%; margin-bottom: 8px; }
 
+.error-hint {
+  color: #dc2626 !important;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.error-message mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
 .form-actions { display: flex; gap: 12px; margin-top: 16px; }
 .form-actions button { flex: 1; }
 

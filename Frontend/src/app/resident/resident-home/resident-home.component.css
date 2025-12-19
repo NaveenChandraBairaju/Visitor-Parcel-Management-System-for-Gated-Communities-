@@ -145,6 +145,93 @@ h2 {
   font-weight: 600;
 }
 
+/* Announcements Section */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title mat-icon {
+  color: #f59e0b;
+}
+
+.announcements-section {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.announcement-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-left: 4px solid #94a3b8;
+}
+
+.announcement-card.priority-high {
+  border-left-color: #ef4444;
+  background: linear-gradient(to right, #fef2f2, #fff);
+}
+.announcement-card.priority-normal { border-left-color: #3b82f6; }
+.announcement-card.priority-low { border-left-color: #10b981; }
+
+.announcement-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.announcement-header .priority-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+.priority-high .priority-icon { color: #ef4444; }
+.priority-normal .priority-icon { color: #3b82f6; }
+.priority-low .priority-icon { color: #10b981; }
+
+.announcement-header h3 {
+  font-size: 16px;
+  color: #1e3a5f;
+  margin: 0;
+  flex: 1;
+}
+
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.priority-badge.high { background: #fee2e2; color: #dc2626; }
+
+.announcement-message {
+  font-size: 14px;
+  color: #475569;
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.announcement-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+.announcement-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.announcement-meta mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
 /* Activity List */
 .activity-list {
   background: #fff;
@@ -199,6 +286,24 @@ h2 {
 .activity-time {
   font-size: 13px;
   color: #94a3b8;
+}
+
+.no-activity {
+  text-align: center;
+  padding: 40px 20px;
+  color: #94a3b8;
+}
+
+.no-activity mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+
+.no-activity p {
+  margin: 12px 0 0;
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {

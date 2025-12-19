@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { VisitorService, Visitor } from '../../services/visitor.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-resident-approval',
@@ -14,21 +15,22 @@ import { VisitorService, Visitor } from '../../services/visitor.service';
   styleUrl: './resident-approval.component.css'
 })
 export class ResidentApprovalComponent {
-  displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'status', 'actions'];
+  displayedColumns = ['name', 'phone', 'purpose', 'checkIn', 'status', 'actions'];
   visitors: Visitor[] = [];
+  residentFlat: string;
 
-  // Simulated resident flat (would come from auth)
-  residentFlat = 'A-101';
-
-  constructor(private visitorService: VisitorService) {
+  constructor(private visitorService: VisitorService, private authService: AuthService) {
+    // Get logged-in user's flat
+    this.residentFlat = this.authService.getUserFlat();
+    
     this.visitorService.visitors$.subscribe(list => {
       // Filter for this resident's flat
       this.visitors = list.filter(v => v.flatNumber === this.residentFlat);
     });
   }
 
-  get pendingCount() { return this.visitors.filter(v => v.status === 'pending').length; }
-  get approvedCount() { return this.visitors.filter(v => v.status === 'approved' || v.status === 'inside').length; }
+  get waitingCount() { return this.visitors.filter(v => v.status === 'waiting').length; }
+  get approvedCount() { return this.visitors.filter(v => v.status === 'approved' || v.status === 'entered').length; }
   get rejectedCount() { return this.visitors.filter(v => v.status === 'rejected').length; }
 
   approveVisitor(visitor: Visitor) {

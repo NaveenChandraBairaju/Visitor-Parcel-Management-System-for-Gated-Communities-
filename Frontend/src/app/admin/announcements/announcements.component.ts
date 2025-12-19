@@ -19,6 +19,7 @@ import { AnnouncementService, Announcement } from '../../services/announcement.s
 export class AnnouncementsComponent {
   announcement = { title: '', message: '', priority: 'normal' as const, audience: 'all' };
   announcements: Announcement[] = [];
+  showError = false;
 
   constructor(private announcementService: AnnouncementService) {
     this.announcementService.announcements$.subscribe(list => {
@@ -31,24 +32,32 @@ export class AnnouncementsComponent {
   }
 
   get recentCount() {
-    return this.announcements.length; // In real app, filter by date
+    return this.announcements.length;
+  }
+
+  get isFormValid() {
+    return this.announcement.title.trim() && this.announcement.message.trim();
   }
 
   submitAnnouncement() {
-    if (this.announcement.title && this.announcement.message) {
-      const audienceMap: Record<string, string> = {
-        'all': 'All Residents',
-        'residents': 'Residents Only',
-        'security': 'Security Guards'
-      };
-      this.announcementService.addAnnouncement({
-        title: this.announcement.title,
-        message: this.announcement.message,
-        priority: this.announcement.priority,
-        audience: audienceMap[this.announcement.audience]
-      });
-      this.clearForm();
+    if (!this.isFormValid) {
+      this.showError = true;
+      return;
     }
+    
+    const audienceMap: Record<string, string> = {
+      'all': 'All Residents',
+      'residents': 'Residents Only',
+      'security': 'Security Guards'
+    };
+    this.announcementService.addAnnouncement({
+      title: this.announcement.title.trim(),
+      message: this.announcement.message.trim(),
+      priority: this.announcement.priority,
+      audience: audienceMap[this.announcement.audience]
+    });
+    this.clearForm();
+    this.showError = false;
   }
 
   clearForm() {

@@ -27,6 +27,7 @@ export class PreApproveComponent {
   visitor = { name: '', phone: '', purpose: '', expectedDate: null as Date | null, vehicleNumber: '' };
   displayedColumns = ['name', 'phone', 'purpose', 'expectedDate', 'status', 'actions'];
   preApprovedList: PreApprovedVisitor[] = [];
+  showError = false;
 
   // Simulated resident info (would come from auth service in real app)
   residentFlat = 'A-101';
@@ -39,23 +40,37 @@ export class PreApproveComponent {
     });
   }
 
+  get isFormValid(): boolean {
+    return !!(
+      this.visitor.name.trim() &&
+      this.visitor.phone.length === 10 &&
+      /^[0-9]{10}$/.test(this.visitor.phone) &&
+      this.visitor.purpose &&
+      this.visitor.expectedDate
+    );
+  }
+
   submitPreApproval() {
-    if (this.visitor.name && this.visitor.phone) {
-      const expectedDate = this.visitor.expectedDate 
-        ? new Date(this.visitor.expectedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-        : 'Today';
-      
-      this.preApproveService.addPreApproval(
-        { ...this.visitor, expectedDate },
-        this.residentFlat,
-        this.residentName
-      );
-      this.clearForm();
+    if (!this.isFormValid) {
+      this.showError = true;
+      return;
     }
+    
+    const expectedDate = this.visitor.expectedDate 
+      ? new Date(this.visitor.expectedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      : 'Today';
+    
+    this.preApproveService.addPreApproval(
+      { ...this.visitor, expectedDate },
+      this.residentFlat,
+      this.residentName
+    );
+    this.clearForm();
   }
 
   clearForm() {
     this.visitor = { name: '', phone: '', purpose: '', expectedDate: null, vehicleNumber: '' };
+    this.showError = false;
   }
 
   cancelApproval(item: PreApprovedVisitor) {

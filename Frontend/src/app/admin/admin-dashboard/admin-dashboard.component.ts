@@ -20,7 +20,8 @@ export class AdminDashboardComponent {
   totalVisitors = 0;
   totalParcels = 0;
   activeGuards = 8;
-  pendingApprovals = 0;
+  pendingVisitorApprovals = 0;
+  pendingParcelApprovals = 0;
   todayVisitors = 0;
 
   constructor(
@@ -29,12 +30,13 @@ export class AdminDashboardComponent {
   ) {
     this.visitorService.visitors$.subscribe(list => {
       this.totalVisitors = list.length;
-      this.pendingApprovals = list.filter(v => v.status === 'pending').length;
+      this.pendingVisitorApprovals = list.filter(v => v.status === 'waiting').length;
       this.todayVisitors = list.filter(v => v.date === 'Today').length;
     });
 
     this.parcelService.parcels$.subscribe(list => {
       this.totalParcels = list.length;
+      this.pendingParcelApprovals = list.filter(p => p.status === 'Pending').length;
     });
   }
 }

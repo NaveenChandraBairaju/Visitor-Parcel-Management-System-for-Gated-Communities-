@@ -72,35 +72,49 @@
     </a>
   </div>
 
+  <!-- Announcements Section -->
+  @if (announcements.length > 0) {
+    <h2 class="section-title"><mat-icon>campaign</mat-icon> Announcements</h2>
+    <div class="announcements-section">
+      @for (announcement of announcements; track announcement.id) {
+        <div class="announcement-card" [ngClass]="'priority-' + announcement.priority">
+          <div class="announcement-header">
+            <mat-icon class="priority-icon">
+              {{announcement.priority === 'high' ? 'error' : announcement.priority === 'normal' ? 'info' : 'check_circle'}}
+            </mat-icon>
+            <h3>{{announcement.title}}</h3>
+            @if (announcement.priority === 'high') {
+              <span class="priority-badge high">Urgent</span>
+            }
+          </div>
+          <p class="announcement-message">{{announcement.message}}</p>
+          <div class="announcement-meta">
+            <span><mat-icon>calendar_today</mat-icon> {{announcement.date}}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
   <!-- Recent Activity -->
   <h2>Recent Activity</h2>
   <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-icon approved">
-        <mat-icon>check_circle</mat-icon>
+    @if (recentActivities.length === 0) {
+      <div class="no-activity">
+        <mat-icon>history</mat-icon>
+        <p>No recent activity. Actions like approving visitors or collecting parcels will appear here.</p>
       </div>
-      <div class="activity-info">
-        <span class="activity-title">Visitor Approved - Rajesh Kumar</span>
-        <span class="activity-time">Today, 10:30 AM</span>
+    }
+    @for (activity of recentActivities; track activity.id) {
+      <div class="activity-item">
+        <div class="activity-icon" [ngClass]="getActivityClass(activity.type)">
+          <mat-icon>{{getActivityIcon(activity.type)}}</mat-icon>
+        </div>
+        <div class="activity-info">
+          <span class="activity-title">{{activity.title}}</span>
+          <span class="activity-time">{{activity.date}}, {{activity.time}}</span>
+        </div>
       </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-icon parcel">
-        <mat-icon>inventory_2</mat-icon>
-      </div>
-      <div class="activity-info">
-        <span class="activity-title">Parcel Received - Amazon Package</span>
-        <span class="activity-time">Today, 9:15 AM</span>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-icon rejected">
-        <mat-icon>cancel</mat-icon>
-      </div>
-      <div class="activity-info">
-        <span class="activity-title">Visitor Rejected - Unknown Person</span>
-        <span class="activity-time">Yesterday, 4:45 PM</span>
-      </div>
-    </div>
+    }
   </div>
 </div>

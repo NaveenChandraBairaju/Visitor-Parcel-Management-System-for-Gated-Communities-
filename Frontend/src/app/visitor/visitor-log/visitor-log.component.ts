@@ -24,6 +24,7 @@ export class VisitorLogComponent {
   visitor = { name: '', phone: '', purpose: '', flatNumber: '', vehicleNumber: '' };
   displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'checkIn'];
   recentVisitors: Visitor[] = [];
+  showError = false;
 
   constructor(private visitorService: VisitorService) {
     this.visitorService.visitors$.subscribe(list => {
@@ -31,14 +32,28 @@ export class VisitorLogComponent {
     });
   }
 
+  get isFormValid(): boolean {
+    return !!(
+      this.visitor.name.trim() && 
+      this.visitor.phone.length === 10 && 
+      /^[0-9]{10}$/.test(this.visitor.phone) &&
+      this.visitor.purpose &&
+      this.visitor.flatNumber.trim()
+    );
+  }
+
   submitVisitor() {
-    if (this.visitor.name && this.visitor.phone && this.visitor.flatNumber) {
-      this.visitorService.addVisitor(this.visitor);
-      this.clearForm();
+    if (!this.isFormValid) {
+      this.showError = true;
+      return;
     }
+    this.visitorService.addVisitor(this.visitor);
+    this.clearForm();
+    this.showError = false;
   }
 
   clearForm() {
     this.visitor = { name: '', phone: '', purpose: '', flatNumber: '', vehicleNumber: '' };
+    this.showError = false;
   }
 }

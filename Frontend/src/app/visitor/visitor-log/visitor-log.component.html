@@ -12,19 +12,23 @@
       
       <mat-form-field appearance="outline">
         <mat-label>Visitor Name</mat-label>
-        <input matInput [(ngModel)]="visitor.name" placeholder="Enter visitor name">
+        <input matInput [(ngModel)]="visitor.name" placeholder="Enter visitor name" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Phone Number</mat-label>
-        <input matInput [(ngModel)]="visitor.phone" placeholder="Enter phone number">
+        <input matInput [(ngModel)]="visitor.phone" placeholder="Enter 10-digit phone number" 
+               maxlength="10" pattern="[0-9]{10}" required>
+        @if (visitor.phone && visitor.phone.length > 0 && visitor.phone.length < 10) {
+          <mat-hint class="error-hint">Phone must be 10 digits ({{visitor.phone.length}}/10)</mat-hint>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Purpose of Visit</mat-label>
-        <mat-select [(ngModel)]="visitor.purpose">
-          <mat-option value="Delivery">Delivery</mat-option>
+        <mat-select [(ngModel)]="visitor.purpose" required>
           <mat-option value="Guest">Guest</mat-option>
+          <mat-option value="Family">Family</mat-option>
           <mat-option value="Maintenance">Maintenance</mat-option>
           <mat-option value="Service">Service</mat-option>
         </mat-select>
@@ -32,13 +36,19 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Visiting Flat/Unit</mat-label>
-        <input matInput [(ngModel)]="visitor.flatNumber" placeholder="e.g., A-101">
+        <input matInput [(ngModel)]="visitor.flatNumber" placeholder="e.g., A-101" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Vehicle Number (Optional)</mat-label>
         <input matInput [(ngModel)]="visitor.vehicleNumber" placeholder="e.g., KA-01-AB-1234">
       </mat-form-field>
+
+      @if (showError && !isFormValid) {
+        <div class="error-message">
+          <mat-icon>warning</mat-icon> Please fill all required fields correctly
+        </div>
+      }
 
       <div class="form-actions">
         <button mat-stroked-button (click)="clearForm()">Clear</button>

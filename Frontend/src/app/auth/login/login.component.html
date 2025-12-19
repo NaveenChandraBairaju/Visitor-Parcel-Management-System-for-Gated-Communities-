@@ -42,6 +42,13 @@
         </div>
       </div>
 
+      @if (errorMessage) {
+        <div class="error-message">
+          <mat-icon>error</mat-icon>
+          <span>{{errorMessage}}</span>
+        </div>
+      }
+
       <button type="button" class="login-btn" (click)="login()">
         Sign In <mat-icon>arrow_forward</mat-icon>
       </button>

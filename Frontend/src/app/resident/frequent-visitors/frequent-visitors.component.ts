@@ -7,25 +7,38 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FrequentVisitorService, FrequentVisitor } from '../../services/frequent-visitor.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-frequent-visitors',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './frequent-visitors.component.html',
   styleUrl: './frequent-visitors.component.css'
 })
 export class FrequentVisitorsComponent {
   displayedColumns = ['name', 'phone', 'relation', 'visits', 'lastVisit', 'actions'];
   searchQuery = '';
+  showAddForm = false;
+  residentFlat: string;
+  
+  relationTypes = ['Family', 'Friend', 'Domestic Help', 'Driver', 'Other'];
+  
+  newVisitor = { name: '', phone: '', relation: '' };
+  frequentVisitors: FrequentVisitor[] = [];
+  showError = false;
 
-  frequentVisitors = [
-    { id: 1, name: 'Rajesh Kumar', phone: '9876543210', relation: 'Friend', visits: 15, lastVisit: '17 Dec 2025' },
-    { id: 2, name: 'Meera Patel', phone: '9876543211', relation: 'Family', visits: 28, lastVisit: '16 Dec 2025' },
-    { id: 3, name: 'Suresh - Maid', phone: '9876543212', relation: 'Domestic Help', visits: 45, lastVisit: '18 Dec 2025' },
-    { id: 4, name: 'Ravi - Driver', phone: '9876543213', relation: 'Driver', visits: 60, lastVisit: '18 Dec 2025' },
-    { id: 5, name: 'Amazon Delivery', phone: '1800123456', relation: 'Delivery', visits: 12, lastVisit: '15 Dec 2025' }
-  ];
+  constructor(private frequentVisitorService: FrequentVisitorService, private authService: AuthService) {
+    // Get logged-in user's flat
+    this.residentFlat = this.authService.getUserFlat();
+    
+    // Subscribe to get real-time updates (visit counts update automatically)
+    this.frequentVisitorService.frequentVisitors$.subscribe(list => {
+      this.frequentVisitors = list.filter(v => v.flatNumber === this.residentFlat);
+    });
+  }
 
   get filteredVisitors() {
     if (!this.searchQuery) return this.frequentVisitors;
@@ -35,8 +48,45 @@ export class FrequentVisitorsComponent {
     );
   }
 
-  removeVisitor(visitor: any) {
-    const index = this.frequentVisitors.indexOf(visitor);
-    if (index > -1) this.frequentVisitors.splice(index, 1);
+  get isFormValid(): boolean {
+    return !!(
+      this.newVisitor.name.trim() && 
+      this.newVisitor.phone.length === 10 && 
+      /^[0-9]{10}$/.test(this.newVisitor.phone) &&
+      this.newVisitor.relation
+    );
+  }
+
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    if (!this.showAddForm) {
+      this.resetForm();
+    }
+  }
+
+  addVisitor() {
+    if (!this.isFormValid) {
+      this.showError = true;
+      return;
+    }
+    
+    this.frequentVisitorService.addFrequentVisitor({
+      name: this.newVisitor.name.trim(),
+      phone: this.newVisitor.phone,
+      relation: this.newVisitor.relation,
+      flatNumber: this.residentFlat
+    });
+    
+    this.resetForm();
+    this.showAddForm = false;
+  }
+
+  resetForm() {
+    this.newVisitor = { name: '', phone: '', relation: '' };
+    this.showError = false;
+  }
+
+  removeVisitor(visitor: FrequentVisitor) {
+    this.frequentVisitorService.removeFrequentVisitor(visitor.id);
   }
 }

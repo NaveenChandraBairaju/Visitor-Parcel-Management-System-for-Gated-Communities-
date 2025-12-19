@@ -4,11 +4,62 @@
       <h1>Frequent Visitors</h1>
       <p>Manage your regular visitors for quick approvals</p>
     </div>
+    <button mat-raised-button color="primary" (click)="toggleAddForm()">
+      <mat-icon>{{ showAddForm ? 'close' : 'person_add' }}</mat-icon>
+      {{ showAddForm ? 'Cancel' : 'Add Visitor' }}
+    </button>
   </div>
+
+  <!-- Add Visitor Form -->
+  @if (showAddForm) {
+    <div class="add-form-card">
+      <h2>Add Frequent Visitor</h2>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Visitor Name</mat-label>
+          <input matInput [(ngModel)]="newVisitor.name" placeholder="Enter name" required>
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput [(ngModel)]="newVisitor.phone" placeholder="Enter 10-digit phone" 
+                 maxlength="10" required>
+          <mat-icon matPrefix>phone</mat-icon>
+          @if (newVisitor.phone && newVisitor.phone.length > 0 && newVisitor.phone.length < 10) {
+            <mat-hint class="error-hint">Phone must be 10 digits ({{newVisitor.phone.length}}/10)</mat-hint>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Relation</mat-label>
+          <mat-select [(ngModel)]="newVisitor.relation" required>
+            @for (rel of relationTypes; track rel) {
+              <mat-option [value]="rel">{{ rel }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>group</mat-icon>
+        </mat-form-field>
+      </div>
+      
+      @if (showError && !isFormValid) {
+        <div class="error-message">
+          <mat-icon>warning</mat-icon> Please fill all fields correctly (phone must be 10 digits)
+        </div>
+      }
+      
+      <div class="form-actions">
+        <button mat-raised-button color="primary" (click)="addVisitor()" [disabled]="!isFormValid">
+          <mat-icon>add</mat-icon> Add Visitor
+        </button>
+        <button mat-stroked-button (click)="toggleAddForm()">Cancel</button>
+      </div>
+    </div>
+  }
 
   <div class="table-card">
     <div class="table-header">
-      <h2>Your Regular Visitors</h2>
+      <h2>Your Regular Visitors ({{ frequentVisitors.length }})</h2>
       <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
         <input matInput [(ngModel)]="searchQuery" placeholder="Search by name or relation">

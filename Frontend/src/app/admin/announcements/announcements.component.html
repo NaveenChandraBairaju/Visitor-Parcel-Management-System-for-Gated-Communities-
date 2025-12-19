@@ -1,28 +1,28 @@
 <div class="announcements-page">
+  <!-- Header -->
   <div class="page-header">
-    <div>
-      <h1>Community Announcements</h1>
-      <p>Send notices and updates to residents and security</p>
-    </div>
+    <h1>Community Announcements</h1>
+    <p>Send notices and updates to residents and security</p>
   </div>
 
+  <!-- Stats -->
   <div class="stats-row">
-    <div class="stat-card total">
-      <mat-icon>campaign</mat-icon>
+    <div class="stat-card">
+      <mat-icon class="icon-purple">campaign</mat-icon>
       <div class="stat-info">
         <span class="stat-num">{{announcements.length}}</span>
-        <span class="stat-label">Total Announcements</span>
+        <span class="stat-label">Total</span>
       </div>
     </div>
-    <div class="stat-card high">
-      <mat-icon>priority_high</mat-icon>
+    <div class="stat-card">
+      <mat-icon class="icon-red">error</mat-icon>
       <div class="stat-info">
         <span class="stat-num">{{highPriorityCount}}</span>
         <span class="stat-label">High Priority</span>
       </div>
     </div>
-    <div class="stat-card active">
-      <mat-icon>notifications_active</mat-icon>
+    <div class="stat-card">
+      <mat-icon class="icon-green">schedule</mat-icon>
       <div class="stat-info">
         <span class="stat-num">{{recentCount}}</span>
         <span class="stat-label">This Week</span>
@@ -30,98 +30,91 @@
     </div>
   </div>
 
-  <div class="content-grid">
-    <div class="form-card">
-      <h2><mat-icon>add_circle</mat-icon> Create Announcement</h2>
+  <!-- Main Content -->
+  <div class="main-grid">
+    <!-- Form Section -->
+    <div class="form-section">
+      <div class="section-title">
+        <mat-icon>edit</mat-icon>
+        <span>New Announcement</span>
+      </div>
       
-      <mat-form-field appearance="outline">
-        <mat-label>Title</mat-label>
-        <input matInput [(ngModel)]="announcement.title" placeholder="Announcement title">
-      </mat-form-field>
+      <div class="form-body">
+        <mat-form-field appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput [(ngModel)]="announcement.title" placeholder="Enter title">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Message</mat-label>
-        <textarea matInput [(ngModel)]="announcement.message" rows="4" placeholder="Write your announcement..."></textarea>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Message</mat-label>
+          <textarea matInput [(ngModel)]="announcement.message" rows="3" placeholder="Enter message"></textarea>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Priority</mat-label>
-        <mat-select [(ngModel)]="announcement.priority">
-          <mat-option value="low">
-            <mat-icon style="color:#10b981">arrow_downward</mat-icon> Low
-          </mat-option>
-          <mat-option value="normal">
-            <mat-icon style="color:#3b82f6">remove</mat-icon> Normal
-          </mat-option>
-          <mat-option value="high">
-            <mat-icon style="color:#ef4444">arrow_upward</mat-icon> High / Urgent
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select [(ngModel)]="announcement.priority">
+              <mat-option value="low">Low</mat-option>
+              <mat-option value="normal">Normal</mat-option>
+              <mat-option value="high">High</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Audience</mat-label>
-        <mat-select [(ngModel)]="announcement.audience">
-          <mat-option value="all">
-            <mat-icon>groups</mat-icon> All (Residents + Security)
-          </mat-option>
-          <mat-option value="residents">
-            <mat-icon>family_restroom</mat-icon> Residents Only
-          </mat-option>
-          <mat-option value="security">
-            <mat-icon>security</mat-icon> Security Guards Only
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Audience</mat-label>
+            <mat-select [(ngModel)]="announcement.audience">
+              <mat-option value="all">All</mat-option>
+              <mat-option value="residents">Residents</mat-option>
+              <mat-option value="security">Security</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-      <div class="form-actions">
-        <button mat-stroked-button (click)="clearForm()">
-          <mat-icon>clear</mat-icon> Clear
-        </button>
-        <button mat-raised-button color="primary" (click)="submitAnnouncement()">
-          <mat-icon>send</mat-icon> Publish
-        </button>
+        @if (showError && !isFormValid) {
+          <div class="error-msg">
+            <mat-icon>warning</mat-icon> Fill in title and message
+          </div>
+        }
+
+        <div class="form-actions">
+          <button mat-stroked-button (click)="clearForm()">Clear</button>
+          <button mat-raised-button color="primary" (click)="submitAnnouncement()">
+            <mat-icon>send</mat-icon> Publish
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="announcements-list">
-      <h2><mat-icon>history</mat-icon> Recent Announcements</h2>
-      
+    <!-- List Section -->
+    <div class="list-section">
+      <div class="section-title">
+        <mat-icon>list</mat-icon>
+        <span>All Announcements</span>
+      </div>
+
       @if (announcements.length === 0) {
         <div class="empty-state">
-          <mat-icon>campaign</mat-icon>
-          <p>No announcements yet</p>
+          <mat-icon>inbox</mat-icon>
+          <p>No announcements</p>
         </div>
-      }
-
-      @for (item of announcements; track item.id) {
-        <div class="announcement-card" [ngClass]="'priority-' + item.priority">
-          <div class="announcement-header">
-            <div class="title-section">
-              <mat-icon class="priority-icon">
-                {{item.priority === 'high' ? 'error' : item.priority === 'normal' ? 'info' : 'check_circle'}}
-              </mat-icon>
+      } @else {
+        <div class="announcements-grid">
+          @for (item of announcements; track item.id) {
+            <div class="card" [class]="'priority-' + item.priority">
+              <div class="card-header">
+                <span class="badge" [class]="'badge-' + item.priority">{{item.priority}}</span>
+                <button class="delete-btn" (click)="deleteAnnouncement(item)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
               <h3>{{item.title}}</h3>
+              <p>{{item.message}}</p>
+              <div class="card-meta">
+                <span><mat-icon>people</mat-icon>{{item.audience}}</span>
+                <span><mat-icon>event</mat-icon>{{item.date}}</span>
+              </div>
             </div>
-            <span class="priority-badge" [ngClass]="'badge-' + item.priority">{{item.priority}}</span>
-          </div>
-          <p class="announcement-message">{{item.message}}</p>
-          <div class="announcement-footer">
-            <div class="meta">
-              <span class="audience-tag">
-                <mat-icon>people</mat-icon> {{item.audience}}
-              </span>
-              <span>
-                <mat-icon>calendar_today</mat-icon> {{item.date}}
-              </span>
-              <span>
-                <mat-icon>person</mat-icon> {{item.author}}
-              </span>
-            </div>
-            <button mat-icon-button color="warn" (click)="deleteAnnouncement(item)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+          }
         </div>
       }
     </div>

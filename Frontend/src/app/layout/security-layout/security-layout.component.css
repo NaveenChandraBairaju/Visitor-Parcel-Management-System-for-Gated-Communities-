@@ -13,7 +13,7 @@
 }
 
 .security-nav {
-  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  background: linear-gradient(135deg, #059669, #10b981);
 }
 
 .nav-left .brand {
@@ -37,12 +37,13 @@
 }
 
 .nav-center a {
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
   border-radius: 8px;
   padding: 8px 16px;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 500;
 }
 
 .nav-center a:hover {

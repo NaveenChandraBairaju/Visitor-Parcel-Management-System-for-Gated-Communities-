@@ -54,13 +54,21 @@
       <p>Record a new parcel delivery</p>
       <span class="action-btn">Add Parcel →</span>
     </a>
-    <a routerLink="/security/visitor-checkout" class="action-card">
-      <div class="action-icon checkout-icon">
-        <mat-icon>logout</mat-icon>
+    <a routerLink="/security/all-visitors" class="action-card">
+      <div class="action-icon allvisitors-icon">
+        <mat-icon>groups</mat-icon>
       </div>
-      <h3>Visitor Check-Out</h3>
-      <p>Mark visitor exit from premises</p>
-      <span class="action-btn">Check-Out →</span>
+      <h3>All Visitors</h3>
+      <p>View all visitors and manage entry/exit</p>
+      <span class="action-btn">View All →</span>
+    </a>
+    <a routerLink="/security/all-parcels" class="action-card">
+      <div class="action-icon allparcels-icon">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <h3>All Parcels</h3>
+      <p>View all parcels and track deliveries</p>
+      <span class="action-btn">View All →</span>
     </a>
     <a routerLink="/security/pre-approved" class="action-card">
       <div class="action-icon preapproved-icon">
@@ -72,35 +80,49 @@
     </a>
   </div>
 
+  <!-- Announcements Section -->
+  @if (announcements.length > 0) {
+    <h2 class="section-title"><mat-icon>campaign</mat-icon> Announcements</h2>
+    <div class="announcements-section">
+      @for (announcement of announcements; track announcement.id) {
+        <div class="announcement-card" [ngClass]="'priority-' + announcement.priority">
+          <div class="announcement-header">
+            <mat-icon class="priority-icon">
+              {{announcement.priority === 'high' ? 'error' : announcement.priority === 'normal' ? 'info' : 'check_circle'}}
+            </mat-icon>
+            <h3>{{announcement.title}}</h3>
+            @if (announcement.priority === 'high') {
+              <span class="priority-badge high">Urgent</span>
+            }
+          </div>
+          <p class="announcement-message">{{announcement.message}}</p>
+          <div class="announcement-meta">
+            <span><mat-icon>calendar_today</mat-icon> {{announcement.date}}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
   <!-- Recent Activity -->
   <h2>Recent Activity</h2>
   <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-icon entry">
-        <mat-icon>login</mat-icon>
+    @if (recentActivities.length === 0) {
+      <div class="no-activity">
+        <mat-icon>history</mat-icon>
+        <p>No recent activity. Log visitors or parcels to see activity here.</p>
       </div>
-      <div class="activity-info">
-        <span class="activity-title">Visitor Entry - Rajesh Kumar</span>
-        <span class="activity-time">Today, 10:30 AM</span>
+    }
+    @for (activity of recentActivities; track activity.id) {
+      <div class="activity-item">
+        <div class="activity-icon" [ngClass]="getActivityClass(activity.type)">
+          <mat-icon>{{getActivityIcon(activity.type)}}</mat-icon>
+        </div>
+        <div class="activity-info">
+          <span class="activity-title">{{activity.title}}</span>
+          <span class="activity-time">{{activity.date}}, {{activity.time}}</span>
+        </div>
       </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-icon parcel">
-        <mat-icon>inventory_2</mat-icon>
-      </div>
-      <div class="activity-info">
-        <span class="activity-title">Parcel Logged - Amazon Package for A-101</span>
-        <span class="activity-time">Today, 9:45 AM</span>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-icon exit">
-        <mat-icon>logout</mat-icon>
-      </div>
-      <div class="activity-info">
-        <span class="activity-title">Visitor Exit - Delivery Person</span>
-        <span class="activity-time">Today, 9:15 AM</span>
-      </div>
-    </div>
+    }
   </div>
 </div>

@@ -33,13 +33,13 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Full Name</mat-label>
-          <input matInput [(ngModel)]="fullName" name="fullName">
+          <input matInput [(ngModel)]="fullName" name="fullName" required>
           <mat-icon matPrefix>person</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="email" name="email" type="email">
+          <input matInput [(ngModel)]="email" name="email" type="email" required>
           <mat-icon matPrefix>email</mat-icon>
         </mat-form-field>
       </div>
@@ -47,20 +47,23 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Phone Number</mat-label>
-          <input matInput [(ngModel)]="phone" name="phone">
+          <input matInput [(ngModel)]="phone" name="phone" maxlength="10" required>
           <mat-icon matPrefix>phone</mat-icon>
+          @if (phone && phone.length > 0 && phone.length < 10) {
+            <mat-hint class="error-hint">Phone must be 10 digits ({{phone.length}}/10)</mat-hint>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Flat/Unit Number</mat-label>
-          <input matInput [(ngModel)]="flatNumber" name="flatNumber">
+          <input matInput [(ngModel)]="flatNumber" name="flatNumber" required>
           <mat-icon matPrefix>home</mat-icon>
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Role</mat-label>
-        <mat-select [(ngModel)]="role" name="role">
+        <mat-select [(ngModel)]="role" name="role" required>
           <mat-option value="resident">Resident</mat-option>
           <mat-option value="security">Security Guard</mat-option>
         </mat-select>
@@ -70,28 +73,40 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput [(ngModel)]="password" name="password" [type]="hidePassword ? 'password' : 'text'">
+          <input matInput [(ngModel)]="password" name="password" [type]="hidePassword ? 'password' : 'text'" required minlength="6">
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
+          @if (password && password.length > 0 && password.length < 6) {
+            <mat-hint class="error-hint">Password must be at least 6 characters</mat-hint>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Confirm Password</mat-label>
-          <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'">
+          <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'" required>
           <mat-icon matPrefix>lock_outline</mat-icon>
           <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
             <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
+          @if (confirmPassword && password !== confirmPassword) {
+            <mat-hint class="error-hint">Passwords do not match</mat-hint>
+          }
         </mat-form-field>
       </div>
 
-      <mat-checkbox class="terms-checkbox">
+      <mat-checkbox class="terms-checkbox" [(ngModel)]="agreeTerms" name="agreeTerms">
         I agree to the <a href="#">Terms & Conditions</a>
       </mat-checkbox>
 
-      <button mat-raised-button color="primary" class="auth-btn" (click)="signup()">
+      @if (showError && errorMessage) {
+        <div class="error-message">
+          <mat-icon>warning</mat-icon> {{errorMessage}}
+        </div>
+      }
+
+      <button mat-raised-button color="primary" class="auth-btn" (click)="signup()" [disabled]="!isFormValid">
         Create Account
       </button>
 

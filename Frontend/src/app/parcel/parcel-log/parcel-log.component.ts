@@ -21,8 +21,16 @@ import { ParcelService, Parcel } from '../../services/parcel.service';
   styleUrl: './parcel-log.component.css'
 })
 export class ParcelLogComponent {
-  parcel = { courier: '', name: '', recipientName: '', flatNumber: '', description: '' };
-  displayedColumns = ['courier', 'name', 'flatNumber', 'receivedTime'];
+  parcel = { 
+    courier: '', 
+    name: '', 
+    recipientName: '', 
+    flatNumber: '', 
+    description: '',
+    deliveryPersonName: '',
+    deliveryPersonPhone: ''
+  };
+  displayedColumns = ['courier', 'name', 'flatNumber', 'receivedTime', 'deliveryStatus'];
   recentParcels: Parcel[] = [];
 
   constructor(private parcelService: ParcelService) {
@@ -31,20 +39,51 @@ export class ParcelLogComponent {
     });
   }
 
+  showError = false;
+
+  get isFormValid(): boolean {
+    return !!(
+      this.parcel.courier && 
+      this.parcel.name.trim() && 
+      this.parcel.flatNumber.trim() &&
+      this.parcel.deliveryPersonName.trim() &&
+      this.parcel.deliveryPersonPhone.length === 10 &&
+      /^[0-9]{10}$/.test(this.parcel.deliveryPersonPhone)
+    );
+  }
+
   submitParcel() {
-    if (this.parcel.courier && this.parcel.name && this.parcel.flatNumber) {
-      this.parcelService.addParcel({
-        courier: this.parcel.courier,
-        name: this.parcel.name,
-        flatNumber: this.parcel.flatNumber,
-        recipientName: this.parcel.recipientName,
-        description: this.parcel.description
-      });
-      this.clearForm();
+    if (!this.isFormValid) {
+      this.showError = true;
+      return;
     }
+    this.parcelService.addParcel({
+      courier: this.parcel.courier,
+      name: this.parcel.name.trim(),
+      flatNumber: this.parcel.flatNumber.trim(),
+      recipientName: this.parcel.recipientName.trim(),
+      description: this.parcel.description,
+      deliveryPersonName: this.parcel.deliveryPersonName.trim(),
+      deliveryPersonPhone: this.parcel.deliveryPersonPhone
+    });
+    this.clearForm();
+    this.showError = false;
+  }
+
+  markDeliveryLeft(parcel: Parcel) {
+    this.parcelService.markDeliveryPersonLeft(parcel.id);
   }
 
   clearForm() {
-    this.parcel = { courier: '', name: '', recipientName: '', flatNumber: '', description: '' };
+    this.parcel = { 
+      courier: '', 
+      name: '', 
+      recipientName: '', 
+      flatNumber: '', 
+      description: '',
+      deliveryPersonName: '',
+      deliveryPersonPhone: ''
+    };
+    this.showError = false;
   }
 }

@@ -34,10 +34,6 @@ export const routes: Routes = [
         loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
       },
       {
-        path: 'history',
-        loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
-      },
-      {
         path: 'pre-approve',
         loadComponent: () => import('./resident/pre-approve/pre-approve.component').then(m => m.PreApproveComponent)
       },
@@ -67,15 +63,11 @@ export const routes: Routes = [
       },
       {
         path: 'all-visitors',
-        loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
+        loadComponent: () => import('./security/all-visitors/all-visitors.component').then(m => m.AllVisitorsComponent)
       },
       {
         path: 'all-parcels',
-        loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
-      },
-      {
-        path: 'visitor-checkout',
-        loadComponent: () => import('./security/visitor-checkout/visitor-checkout.component').then(m => m.VisitorCheckoutComponent)
+        loadComponent: () => import('./security/all-parcels/all-parcels.component').then(m => m.AllParcelsComponent)
       },
       {
         path: 'pre-approved',
@@ -99,11 +91,11 @@ export const routes: Routes = [
       },
       {
         path: 'visitors',
-        loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
+        loadComponent: () => import('./security/all-visitors/all-visitors.component').then(m => m.AllVisitorsComponent)
       },
       {
         path: 'parcels',
-        loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
+        loadComponent: () => import('./security/all-parcels/all-parcels.component').then(m => m.AllParcelsComponent)
       },
       {
         path: 'announcements',

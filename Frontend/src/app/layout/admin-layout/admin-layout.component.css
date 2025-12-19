@@ -1,6 +1,6 @@
 .layout-container {
   min-height: 100vh;
-  background: #fff5f5;
+  background: #f8f9fa;
 }
 
 .top-navbar {
@@ -13,7 +13,7 @@
 }
 
 .admin-nav {
-  background: linear-gradient(135deg, #fa709a, #fee140);
+  background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
 .nav-left .brand {
@@ -37,7 +37,7 @@
 }
 
 .nav-center a {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   padding: 8px 16px;
   display: flex;
@@ -52,6 +52,7 @@
 .nav-center a.active {
   background: rgba(255, 255, 255, 0.25);
   color: #fff;
+  font-weight: 500;
 }
 
 .nav-right button {

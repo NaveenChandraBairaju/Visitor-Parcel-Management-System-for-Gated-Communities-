@@ -2,27 +2,27 @@
   <div class="page-header">
     <div>
       <h1>Parcel Tracking</h1>
-      <p>Track and manage your parcel deliveries</p>
+      <p>Approve and manage your parcel deliveries</p>
     </div>
   </div>
 
   <div class="stats-row">
-    <div class="stat-card received">
-      <mat-icon>inventory_2</mat-icon>
+    <div class="stat-card pending">
+      <mat-icon>hourglass_empty</mat-icon>
       <div class="stat-info">
-        <span class="stat-num">{{receivedCount}}</span>
-        <span class="stat-label">Received</span>
+        <span class="stat-num">{{pendingCount}}</span>
+        <span class="stat-label">Pending Approval</span>
       </div>
     </div>
-    <div class="stat-card acknowledged">
-      <mat-icon>done</mat-icon>
+    <div class="stat-card approved">
+      <mat-icon>check_circle</mat-icon>
       <div class="stat-info">
-        <span class="stat-num">{{acknowledgedCount}}</span>
-        <span class="stat-label">Acknowledged</span>
+        <span class="stat-num">{{approvedCount}}</span>
+        <span class="stat-label">Approved</span>
       </div>
     </div>
     <div class="stat-card collected">
-      <mat-icon>check_circle</mat-icon>
+      <mat-icon>inventory_2</mat-icon>
       <div class="stat-info">
         <span class="stat-num">{{collectedCount}}</span>
         <span class="stat-label">Collected</span>
@@ -56,16 +56,38 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let p">
-          @if (p.status === 'Received') {
-            <button mat-raised-button color="primary" (click)="acknowledgeParcel(p)">Acknowledge</button>
+          @if (p.status === 'Pending') {
+            <div class="action-buttons">
+              <button mat-raised-button color="primary" (click)="approveParcel(p)">
+                <mat-icon>check</mat-icon> Approve
+              </button>
+              <button mat-raised-button color="warn" (click)="rejectParcel(p)">
+                <mat-icon>close</mat-icon> Reject
+              </button>
+            </div>
           }
-          @if (p.status === 'Acknowledged') {
-            <button mat-raised-button color="accent" (click)="collectParcel(p)">Mark Collected</button>
+          @if (p.status === 'Approved' || p.status === 'Acknowledged') {
+            <button mat-raised-button color="accent" (click)="collectParcel(p)">
+              <mat-icon>check_circle</mat-icon> Mark Collected
+            </button>
+          }
+          @if (p.status === 'Collected') {
+            <span class="collected-text"><mat-icon>verified</mat-icon> Collected</span>
+          }
+          @if (p.status === 'Rejected') {
+            <span class="rejected-text"><mat-icon>cancel</mat-icon> Rejected</span>
           }
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    @if (parcels.length === 0) {
+      <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
+        <p>No parcels at the moment</p>
+      </div>
+    }
   </div>
 </div>

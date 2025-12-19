@@ -41,13 +41,48 @@ td.mat-cell { padding: 16px 8px; }
   font-weight: 600;
   text-transform: capitalize;
 }
-.status-pending { background: #fef3c7; color: #d97706; }
-.status-approved, .status-inside { background: #d1fae5; color: #059669; }
+.status-new { background: #e0f2fe; color: #0369a1; }
+.status-waiting { background: #fef3c7; color: #d97706; }
+.status-approved, .status-entered { background: #d1fae5; color: #059669; }
 .status-rejected { background: #fee2e2; color: #dc2626; }
-.status-checked-out { background: #e0f2fe; color: #0369a1; }
+.status-exited { background: #f1f5f9; color: #64748b; }
 
-.action-buttons { display: flex; gap: 8px; }
-.action-buttons button { min-width: 90px; }
+.action-buttons { display: flex; gap: 10px; }
+.action-buttons button { 
+  min-width: 110px; 
+  display: flex; 
+  align-items: center; 
+  gap: 4px;
+}
+.action-buttons button mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+.approved-text, .rejected-text, .exited-text { 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  font-weight: 600; 
+}
+.approved-text { color: #059669; }
+.rejected-text { color: #dc2626; }
+.exited-text { color: #64748b; }
+.approved-text mat-icon, .rejected-text mat-icon, .exited-text mat-icon { 
+  font-size: 18px; 
+  width: 18px; 
+  height: 18px; 
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+.empty-state p { margin-top: 12px; }
 
 @media (max-width: 768px) {
   .stats-row { grid-template-columns: 1fr; }

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   // Home Page
@@ -16,10 +18,15 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () => import('./auth/signup/signup.component').then(m => m.SignupComponent)
   },
+  {
+    path: 'unauthorized',
+    loadComponent: () => import('./auth/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
+  },
   // Resident Portal
   {
     path: 'resident',
     loadComponent: () => import('./layout/resident-layout/resident-layout.component').then(m => m.ResidentLayoutComponent),
+    canActivate: [authGuard, roleGuard(['resident'])],
     children: [
       {
         path: 'home',
@@ -48,6 +55,7 @@ export const routes: Routes = [
   {
     path: 'security',
     loadComponent: () => import('./layout/security-layout/security-layout.component').then(m => m.SecurityLayoutComponent),
+    canActivate: [authGuard, roleGuard(['security'])],
     children: [
       {
         path: 'home',
@@ -80,6 +88,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./layout/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    canActivate: [authGuard, roleGuard(['admin'])],
     children: [
       {
         path: 'dashboard',

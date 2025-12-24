@@ -27,10 +27,10 @@
       </div>
     </div>
     <div class="stat-card today">
-      <mat-icon>groups</mat-icon>
+      <mat-icon>apartment</mat-icon>
       <div class="stat-info">
-        <span class="stat-num">{{todayVisitors}}</span>
-        <span class="stat-label">Today's Visitors</span>
+        <span class="stat-num">{{residentFlat || '-'}}</span>
+        <span class="stat-label">Your Flat</span>
       </div>
     </div>
   </div>
@@ -62,19 +62,11 @@
       <p>Add expected guests for quick entry</p>
       <span class="action-btn">Pre-Approve →</span>
     </a>
-    <a routerLink="/resident/frequent-visitors" class="action-card">
-      <div class="action-icon frequent-icon">
-        <mat-icon>star</mat-icon>
-      </div>
-      <h3>Frequent Visitors</h3>
-      <p>Manage your regular visitors list</p>
-      <span class="action-btn">View List →</span>
-    </a>
   </div>
 
   <!-- Announcements Section -->
   @if (announcements.length > 0) {
-    <h2 class="section-title"><mat-icon>campaign</mat-icon> Announcements</h2>
+    <h2><mat-icon>campaign</mat-icon> Announcements</h2>
     <div class="announcements-section">
       @for (announcement of announcements; track announcement.id) {
         <div class="announcement-card" [ngClass]="'priority-' + announcement.priority">
@@ -89,32 +81,51 @@
           </div>
           <p class="announcement-message">{{announcement.message}}</p>
           <div class="announcement-meta">
-            <span><mat-icon>calendar_today</mat-icon> {{announcement.date}}</span>
+            <span><mat-icon>calendar_today</mat-icon> {{announcement.created_at | date:'short'}}</span>
           </div>
         </div>
       }
     </div>
   }
 
-  <!-- Recent Activity -->
-  <h2>Recent Activity</h2>
-  <div class="activity-list">
-    @if (recentActivities.length === 0) {
-      <div class="no-activity">
-        <mat-icon>history</mat-icon>
-        <p>No recent activity. Actions like approving visitors or collecting parcels will appear here.</p>
-      </div>
-    }
-    @for (activity of recentActivities; track activity.id) {
-      <div class="activity-item">
-        <div class="activity-icon" [ngClass]="getActivityClass(activity.type)">
-          <mat-icon>{{getActivityIcon(activity.type)}}</mat-icon>
+  <!-- Recent History -->
+  @if (recentVisitors.length > 0 || recentParcels.length > 0) {
+    <h2><mat-icon>history</mat-icon> Recent History</h2>
+    <div class="history-grid">
+      @if (recentVisitors.length > 0) {
+        <div class="history-card">
+          <h3><mat-icon>people</mat-icon> Recent Visitors</h3>
+          <div class="history-list">
+            @for (item of recentVisitors; track item.id) {
+              <div class="history-item">
+                <mat-icon>person</mat-icon>
+                <div class="history-info">
+                  <span class="history-name">{{item.name}}</span>
+                  <span class="history-detail">{{item.purpose}}</span>
+                </div>
+                <span class="history-time">{{item.created_at | date:'short'}}</span>
+              </div>
+            }
+          </div>
         </div>
-        <div class="activity-info">
-          <span class="activity-title">{{activity.title}}</span>
-          <span class="activity-time">{{activity.date}}, {{activity.time}}</span>
+      }
+      @if (recentParcels.length > 0) {
+        <div class="history-card">
+          <h3><mat-icon>inventory_2</mat-icon> Recent Parcels</h3>
+          <div class="history-list">
+            @for (item of recentParcels; track item.id) {
+              <div class="history-item">
+                <mat-icon>local_shipping</mat-icon>
+                <div class="history-info">
+                  <span class="history-name">{{item.name}}</span>
+                  <span class="history-detail">{{item.description || 'No description'}}</span>
+                </div>
+                <span class="history-time">{{item.created_at | date:'short'}}</span>
+              </div>
+            }
+          </div>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  }
 </div>

@@ -2,7 +2,7 @@
   <div class="page-header">
     <div>
       <h1>Parcel Log</h1>
-      <p>Log new parcel deliveries and track delivery persons</p>
+      <p>Log new parcel deliveries and track status</p>
     </div>
   </div>
 
@@ -30,31 +30,12 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Flat Number</mat-label>
-        <input matInput [(ngModel)]="parcel.flatNumber" placeholder="e.g., A-101" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Recipient Name (Optional)</mat-label>
-        <input matInput [(ngModel)]="parcel.recipientName" placeholder="Enter recipient name">
-      </mat-form-field>
-
-      <h3 class="section-title"><mat-icon>delivery_dining</mat-icon> Delivery Person Details</h3>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Delivery Person Name</mat-label>
-        <input matInput [(ngModel)]="parcel.deliveryPersonName" placeholder="e.g., Raju" required>
-        <mat-icon matPrefix>person</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Delivery Person Phone</mat-label>
-        <input matInput [(ngModel)]="parcel.deliveryPersonPhone" placeholder="Enter 10-digit phone" 
-               maxlength="10" pattern="[0-9]{10}" required>
-        <mat-icon matPrefix>phone</mat-icon>
-        @if (parcel.deliveryPersonPhone && parcel.deliveryPersonPhone.length > 0 && parcel.deliveryPersonPhone.length < 10) {
-          <mat-hint class="error-hint">Phone must be 10 digits ({{parcel.deliveryPersonPhone.length}}/10)</mat-hint>
-        }
+        <mat-label>Select Resident</mat-label>
+        <mat-select [(ngModel)]="parcel.residentId" required>
+          @for (resident of residents; track resident.id) {
+            <mat-option [value]="resident.id">{{resident.name}} - {{resident.flat_number}}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -70,8 +51,8 @@
 
       <div class="form-actions">
         <button mat-stroked-button (click)="clearForm()">Clear</button>
-        <button mat-raised-button color="primary" (click)="submitParcel()" [disabled]="!isFormValid">
-          <mat-icon>check</mat-icon> Log Parcel
+        <button mat-raised-button color="primary" (click)="submitParcel()" [disabled]="isLoading">
+          <mat-icon>check</mat-icon> {{ isLoading ? 'Logging...' : 'Log Parcel' }}
         </button>
       </div>
     </div>
@@ -80,37 +61,27 @@
       <h2><mat-icon>history</mat-icon> Recent Parcels</h2>
       <table mat-table [dataSource]="recentParcels">
         <ng-container matColumnDef="courier">
-          <th mat-header-cell *matHeaderCellDef>Courier</th>
-          <td mat-cell *matCellDef="let p">
-            <span class="courier-badge">{{p.courier}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Parcel</th>
           <td mat-cell *matCellDef="let p">{{p.name}}</td>
         </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Resident</th>
+          <td mat-cell *matCellDef="let p">{{p.resident_name}}</td>
+        </ng-container>
         <ng-container matColumnDef="flatNumber">
           <th mat-header-cell *matHeaderCellDef>Unit</th>
-          <td mat-cell *matCellDef="let p">{{p.flatNumber}}</td>
+          <td mat-cell *matCellDef="let p">{{p.flat_number}}</td>
         </ng-container>
         <ng-container matColumnDef="receivedTime">
-          <th mat-header-cell *matHeaderCellDef>Arrived</th>
+          <th mat-header-cell *matHeaderCellDef>Received</th>
           <td mat-cell *matCellDef="let p">
-            <span class="time-badge">{{p.receivedTime}}</span>
+            <span class="time-badge">{{p.created_at | date:'short'}}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="deliveryStatus">
-          <th mat-header-cell *matHeaderCellDef>Delivery Person</th>
+          <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let p">
-            @if (p.deliveryPersonLeft) {
-              <span class="delivery-left"><mat-icon>check_circle</mat-icon> Left at {{p.deliveryPersonLeft}}</span>
-            } @else if (p.deliveryPersonArrived) {
-              <button mat-raised-button color="warn" (click)="markDeliveryLeft(p)">
-                <mat-icon>logout</mat-icon> Mark Left
-              </button>
-            } @else {
-              <span class="no-delivery">-</span>
-            }
+            <span class="status-badge">{{p.status}}</span>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -49,12 +49,23 @@ export class AuthService {
 
   getUserRole(): string {
     if (!this.isBrowser) return 'resident';
+    // Reload user if not loaded but localStorage has data
+    if (!this.currentUser.value && localStorage.getItem('userData')) {
+      this.loadUser();
+    }
     return this.currentUser.value?.role || localStorage.getItem('userRole') || 'resident';
   }
 
   isAuthenticated(): boolean {
     if (!this.isBrowser) return false;
     return localStorage.getItem('isAuthenticated') === 'true';
+  }
+
+  // Call this after login to refresh the user state
+  refreshUser(): void {
+    if (this.isBrowser) {
+      this.loadUser();
+    }
   }
 
   logout() {

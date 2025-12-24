@@ -101,7 +101,7 @@
         <div class="alert-item info">
           <mat-icon>info</mat-icon>
           <div class="alert-info">
-            <span class="alert-title">{{todayVisitors}} Visitors Today</span>
+            <span class="alert-title">{{totalVisitors}} Total Visitors</span>
             <span class="alert-time">Updated just now</span>
           </div>
         </div>
@@ -118,33 +118,35 @@
     <div class="activity-section">
       <h2>Recent Activity</h2>
       <div class="activity-list">
-        <div class="activity-item">
-          <div class="activity-icon user-add">
-            <mat-icon>person_add</mat-icon>
+        @if (recentVisitors.length === 0 && recentParcels.length === 0) {
+          <div class="empty-activity">
+            <mat-icon>inbox</mat-icon>
+            <p>No recent activity</p>
           </div>
-          <div class="activity-info">
-            <span class="activity-title">New Resident Added - A-505</span>
-            <span class="activity-time">Today, 11:30 AM</span>
-          </div>
-        </div>
-        <div class="activity-item">
-          <div class="activity-icon guard">
-            <mat-icon>security</mat-icon>
-          </div>
-          <div class="activity-info">
-            <span class="activity-title">Guard Shift Changed - Gate 1</span>
-            <span class="activity-time">Today, 8:00 AM</span>
-          </div>
-        </div>
-        <div class="activity-item">
-          <div class="activity-icon report">
-            <mat-icon>description</mat-icon>
-          </div>
-          <div class="activity-info">
-            <span class="activity-title">Monthly Report Generated</span>
-            <span class="activity-time">Yesterday, 6:00 PM</span>
-          </div>
-        </div>
+        } @else {
+          @for (visitor of recentVisitors; track visitor.id) {
+            <div class="activity-item">
+              <div class="activity-icon visitor">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div class="activity-info">
+                <span class="activity-title">{{visitor.name}} - Flat {{visitor.flat_number}}</span>
+                <span class="activity-time">{{visitor.created_at | date:'short'}}</span>
+              </div>
+            </div>
+          }
+          @for (parcel of recentParcels; track parcel.id) {
+            <div class="activity-item">
+              <div class="activity-icon parcel">
+                <mat-icon>inventory_2</mat-icon>
+              </div>
+              <div class="activity-info">
+                <span class="activity-title">{{parcel.name}} - Flat {{parcel.flat_number}}</span>
+                <span class="activity-time">{{parcel.created_at | date:'short'}}</span>
+              </div>
+            </div>
+          }
+        }
       </div>
     </div>
   </div>

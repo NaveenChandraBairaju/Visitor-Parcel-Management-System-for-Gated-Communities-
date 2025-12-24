@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +20,14 @@ export class LoginComponent implements OnInit {
   role = 'resident';
   hidePassword = true;
   errorMessage = '';
+  isLoading = false;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -92,14 +100,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // Demo users for testing
-  private demoUsers: Record<string, { name: string; flat: string; role: string }> = {
-    'resident@demo.com': { name: 'Rahul Sharma', flat: 'A-101', role: 'resident' },
-    'resident2@demo.com': { name: 'Priya Patel', flat: 'B-205', role: 'resident' },
-    'security@demo.com': { name: 'Security Guard', flat: '', role: 'security' },
-    'admin@demo.com': { name: 'Admin User', flat: '', role: 'admin' }
-  };
-
   login() {
     this.errorMessage = '';
     
@@ -108,36 +108,46 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // Check if demo user exists
-    const demoUser = this.demoUsers[this.email.toLowerCase()];
-    
-    if (demoUser) {
-      // Demo user found - validate role matches selected portal
-      if (demoUser.role !== this.role) {
-        this.errorMessage = `Invalid credentials. This account is for ${demoUser.role} portal.`;
-        return;
-      }
-      
-      // Valid demo user login
-      const userData = {
-        fullName: demoUser.name,
-        flatNumber: demoUser.flat,
-        role: demoUser.role
-      };
+    this.isLoading = true;
 
-      this.setUserAndNavigate(userData);
-    } else {
-      // Unknown email - show error (in real app, would check backend)
-      this.errorMessage = 'Invalid email or password. Try demo accounts: resident@demo.com, security@demo.com, admin@demo.com';
-    }
+    this.apiService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        const user = response.user;
+        
+        // Validate role matches selected portal
+        if (user.role !== this.role) {
+          this.errorMessage = `Invalid credentials. This account is for ${user.role} portal.`;
+          this.isLoading = false;
+          return;
+        }
+
+        const userData = {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          flatNumber: user.flatNumber || '',
+          role: user.role,
+          contactInfo: user.contactInfo
+        };
+
+        this.setUserAndNavigate(userData);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.error?.error || 'Login failed. Please try again.';
+      }
+    });
   }
 
-  private setUserAndNavigate(userData: { fullName: string; flatNumber: string; role: string }) {
+  private setUserAndNavigate(userData: any) {
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('userRole', userData.role);
     localStorage.setItem('userName', userData.fullName);
     localStorage.setItem('userFlat', userData.flatNumber);
     localStorage.setItem('userData', JSON.stringify(userData));
+
+    // Refresh auth service state
+    this.authService.refreshUser();
 
     switch (userData.role) {
       case 'resident':

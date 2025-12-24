@@ -124,3 +124,74 @@ button mat-icon { margin-right: 4px; font-size: 18px; width: 18px; height: 18px;
 @media (max-width: 600px) {
   .stats-row { grid-template-columns: repeat(2, 1fr); }
 }
+
+
+/* History Section */
+.history-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-top: 24px;
+}
+
+.history-section h2 {
+  font-size: 18px;
+  color: #1e3a5f;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-section h2 mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  color: #64748b;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.history-item mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+}
+
+.history-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a5f;
+}
+
+.history-detail {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.history-time {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}

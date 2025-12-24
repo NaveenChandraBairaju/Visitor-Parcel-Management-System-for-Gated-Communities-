@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -7,23 +7,32 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { AnnouncementService, Announcement } from '../../services/announcement.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-announcements',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule, MatSnackBarModule],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.css'
 })
-export class AnnouncementsComponent {
-  announcement = { title: '', message: '', priority: 'normal' as const, audience: 'all' };
-  announcements: Announcement[] = [];
+export class AnnouncementsComponent implements OnInit {
+  announcement = { title: '', message: '', priority: 'normal', audience: 'All' };
+  announcements: any[] = [];
   showError = false;
+  isLoading = false;
 
-  constructor(private announcementService: AnnouncementService) {
-    this.announcementService.announcements$.subscribe(list => {
-      this.announcements = list;
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+
+  ngOnInit() {
+    this.loadAnnouncements();
+  }
+
+  loadAnnouncements() {
+    this.apiService.getAllAnnouncements().subscribe({
+      next: (data) => this.announcements = data,
+      error: (err) => console.error('Error loading announcements:', err)
     });
   }
 
@@ -31,7 +40,7 @@ export class AnnouncementsComponent {
     return this.announcements.filter(a => a.priority === 'high').length;
   }
 
-  get recentCount() {
+  get totalCount() {
     return this.announcements.length;
   }
 
@@ -44,27 +53,42 @@ export class AnnouncementsComponent {
       this.showError = true;
       return;
     }
-    
-    const audienceMap: Record<string, string> = {
-      'all': 'All Residents',
-      'residents': 'Residents Only',
-      'security': 'Security Guards'
-    };
-    this.announcementService.addAnnouncement({
+
+    this.isLoading = true;
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+    this.apiService.createAnnouncement({
       title: this.announcement.title.trim(),
       message: this.announcement.message.trim(),
       priority: this.announcement.priority,
-      audience: audienceMap[this.announcement.audience]
+      audience: this.announcement.audience,
+      createdBy: userData.id
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Announcement created!', 'Close', { duration: 3000 });
+        this.clearForm();
+        this.loadAnnouncements();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.snackBar.open('Failed to create announcement', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
     });
-    this.clearForm();
-    this.showError = false;
   }
 
   clearForm() {
-    this.announcement = { title: '', message: '', priority: 'normal', audience: 'all' };
+    this.announcement = { title: '', message: '', priority: 'normal', audience: 'All' };
+    this.showError = false;
   }
 
-  deleteAnnouncement(item: Announcement) {
-    this.announcementService.deleteAnnouncement(item.id);
+  deleteAnnouncement(item: any) {
+    this.apiService.deleteAnnouncement(item.id).subscribe({
+      next: () => {
+        this.snackBar.open('Announcement deleted', 'Close', { duration: 3000 });
+        this.loadAnnouncements();
+      },
+      error: () => this.snackBar.open('Failed to delete', 'Close', { duration: 3000 })
+    });
   }
 }

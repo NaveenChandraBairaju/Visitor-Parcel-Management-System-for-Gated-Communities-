@@ -17,15 +17,11 @@ export interface PreApprovedVisitor {
   providedIn: 'root'
 })
 export class PreApproveService {
-  private preApprovedList = new BehaviorSubject<PreApprovedVisitor[]>([
-    { id: 1, name: 'Rajesh Kumar', phone: '9876543210', purpose: 'Guest', expectedDate: 'Today', flatNumber: 'A-101', residentName: 'Rahul Sharma', status: 'Active' },
-    { id: 2, name: 'Meera Aunty', phone: '9876543220', purpose: 'Family', expectedDate: 'Today', flatNumber: 'B-205', residentName: 'Priya Patel', status: 'Active' },
-    { id: 3, name: 'Plumber - Ravi', phone: '9876543211', purpose: 'Maintenance', expectedDate: 'Tomorrow', flatNumber: 'C-302', residentName: 'Amit Kumar', status: 'Pending' }
-  ]);
+  private preApprovedList = new BehaviorSubject<PreApprovedVisitor[]>([]);
 
   preApprovedList$ = this.preApprovedList.asObservable();
 
-  private nextId = 4;
+  private nextId = 1;
 
   addPreApproval(visitor: Partial<PreApprovedVisitor>, flatNumber: string, residentName: string) {
     const current = this.preApprovedList.value;

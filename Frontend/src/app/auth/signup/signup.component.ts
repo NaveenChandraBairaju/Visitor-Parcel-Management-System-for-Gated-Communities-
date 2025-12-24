@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -41,22 +44,32 @@ export class SignupComponent {
   agreeTerms = false;
   showError = false;
   errorMessage = '';
+  isLoading = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private snackBar: MatSnackBar
+  ) {}
 
   get isFormValid(): boolean {
-    return !!(
+    const baseValid = !!(
       this.fullName.trim() &&
       this.email.trim() &&
       this.isValidEmail(this.email) &&
       this.phone.length === 10 &&
       /^[0-9]{10}$/.test(this.phone) &&
-      this.flatNumber.trim() &&
       this.role &&
       this.password.length >= 6 &&
       this.password === this.confirmPassword &&
       this.agreeTerms
     );
+    
+    // Flat number required only for residents
+    if (this.role === 'resident') {
+      return baseValid && !!this.flatNumber.trim();
+    }
+    return baseValid;
   }
 
   isValidEmail(email: string): boolean {
@@ -78,7 +91,7 @@ export class SignupComponent {
       this.errorMessage = 'Phone number must be 10 digits';
       return;
     }
-    if (!this.flatNumber.trim()) {
+    if (this.role === 'resident' && !this.flatNumber.trim()) {
       this.errorMessage = 'Please enter your flat/unit number';
       return;
     }
@@ -99,28 +112,27 @@ export class SignupComponent {
       return;
     }
 
-    // Store user data
-    const userData = {
-      fullName: this.fullName.trim(),
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const signupData = {
+      name: this.fullName.trim(),
       email: this.email.trim(),
-      phone: this.phone,
-      flatNumber: this.flatNumber.trim(),
-      role: this.role
+      password: this.password,
+      role: this.role,
+      contactInfo: this.phone,
+      flatNumber: this.role === 'resident' ? this.flatNumber.trim() : null
     };
-    
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('userRole', userData.role);
-    localStorage.setItem('userName', this.fullName);
-    localStorage.setItem('userFlat', this.flatNumber);
-    localStorage.setItem('userData', JSON.stringify(userData));
-    
-    // Navigate based on role
-    if (userData.role === 'admin') {
-      this.router.navigate(['/admin/dashboard']);
-    } else if (userData.role === 'security') {
-      this.router.navigate(['/security/home']);
-    } else {
-      this.router.navigate(['/resident/home']);
-    }
+
+    this.apiService.signup(signupData).subscribe({
+      next: () => {
+        this.snackBar.open('Registration successful! Please login.', 'Close', { duration: 3000 });
+        this.router.navigate(['/login'], { queryParams: { role: this.role } });
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.error || 'Registration failed. Please try again.';
+      }
+    });
   }
 }

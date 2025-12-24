@@ -1,0 +1,112 @@
+import { Router, Request, Response } from 'express';
+import pool from '../config/database';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
+
+const router = Router();
+
+// Get all pre-approved visitors (for security) - active ones
+router.get('/', async (_req: Request, res: Response) => {
+  try {
+    const [rows] = await pool.execute<RowDataPacket[]>(`
+      SELECT pav.*, u.name as resident_name, u.flat_number
+      FROM pre_approved_visitors pav
+      JOIN users u ON pav.resident_id = u.id
+      WHERE pav.status NOT IN ('Exited', 'Cancelled')
+      ORDER BY pav.expected_date ASC
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error('Get pre-approved error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get all pre-approved visitors history (including exited)
+router.get('/history', async (_req: Request, res: Response) => {
+  try {
+    const [rows] = await pool.execute<RowDataPacket[]>(`
+      SELECT pav.*, u.name as resident_name, u.flat_number
+      FROM pre_approved_visitors pav
+      JOIN users u ON pav.resident_id = u.id
+      ORDER BY pav.created_at DESC
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error('Get pre-approved history error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get pre-approved visitors by resident
+router.get('/resident/:residentId', async (req: Request, res: Response) => {
+  try {
+    const { residentId } = req.params;
+    const [rows] = await pool.execute<RowDataPacket[]>(`
+      SELECT * FROM pre_approved_visitors
+      WHERE resident_id = ?
+      ORDER BY created_at DESC
+    `, [residentId]);
+    res.json(rows);
+  } catch (error) {
+    console.error('Get resident pre-approved error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Add pre-approved visitor
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const { residentId, name, phone, purpose, expectedDate, vehicleNumber } = req.body;
+
+    if (!residentId || !name || !phone || !purpose || !expectedDate) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const [result] = await pool.execute<ResultSetHeader>(
+      `INSERT INTO pre_approved_visitors (resident_id, name, phone, purpose, expected_date, vehicle_number, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'Active')`,
+      [residentId, name, phone, purpose, expectedDate, vehicleNumber || null]
+    );
+
+    res.status(201).json({ message: 'Pre-approval added successfully', id: result.insertId });
+  } catch (error) {
+    console.error('Add pre-approved error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update pre-approved status
+router.patch('/:id/status', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    console.log('Updating pre-approved id:', id, 'to status:', status);
+
+    const [result] = await pool.execute<ResultSetHeader>(
+      'UPDATE pre_approved_visitors SET status = ? WHERE id = ?',
+      [status, id]
+    );
+
+    console.log('Update result:', result);
+
+    res.json({ message: 'Status updated successfully' });
+  } catch (error) {
+    console.error('Update pre-approved status error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete pre-approved visitor
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await pool.execute('DELETE FROM pre_approved_visitors WHERE id = ?', [id]);
+    res.json({ message: 'Pre-approval deleted successfully' });
+  } catch (error) {
+    console.error('Delete pre-approved error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+export default router;

@@ -1,64 +1,69 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PreApproveService, PreApprovedVisitor } from '../../services/pre-approve.service';
-import { VisitorService } from '../../services/visitor.service';
-import { ParcelService } from '../../services/parcel.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-pre-approved',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './pre-approved.component.html',
   styleUrl: './pre-approved.component.css'
 })
-export class PreApprovedComponent {
-  displayedColumns = ['name', 'phone', 'flatNumber', 'purpose', 'expectedDate', 'actions'];
-  preApprovedList: PreApprovedVisitor[] = [];
+export class PreApprovedComponent implements OnInit {
+  displayedColumns = ['name', 'phone', 'flatNumber', 'purpose', 'expectedDate', 'status', 'actions'];
+  historyColumns = ['name', 'phone', 'flatNumber', 'purpose', 'expectedDate', 'status'];
+  preApprovedList: any[] = [];
+  historyList: any[] = [];
 
-  constructor(
-    private preApproveService: PreApproveService,
-    private visitorService: VisitorService,
-    private parcelService: ParcelService
-  ) {
-    this.preApproveService.preApprovedList$.subscribe(list => {
-      this.preApprovedList = list.filter(v => v.status === 'Active' || v.status === 'Pending');
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+
+  ngOnInit() {
+    this.loadPreApproved();
+    this.loadHistory();
+  }
+
+  loadPreApproved() {
+    this.apiService.getAllPreApproved().subscribe({
+      next: (data) => this.preApprovedList = data,
+      error: (err) => console.error('Error loading pre-approved:', err)
+    });
+  }
+
+  loadHistory() {
+    this.apiService.getPreApprovedHistory().subscribe({
+      next: (data) => this.historyList = data.filter(v => v.status === 'Exited').slice(0, 10),
+      error: (err) => console.error('Error loading history:', err)
     });
   }
 
   get todayCount() {
-    return this.preApprovedList.filter(v => v.expectedDate === 'Today').length;
+    const today = new Date().toISOString().split('T')[0];
+    return this.preApprovedList.filter(v => v.expected_date === today).length;
   }
 
-  allowEntry(visitor: PreApprovedVisitor) {
-    // Check if it's a delivery - route to parcel service
-    if (visitor.purpose === 'Delivery') {
-      // Add to parcel log
-      this.parcelService.addParcel({
-        courier: visitor.name,
-        name: 'Pre-approved Delivery',
-        flatNumber: visitor.flatNumber,
-        recipientName: visitor.residentName,
-        deliveryPersonName: visitor.name,
-        deliveryPersonPhone: visitor.phone
-      });
-    } else {
-      // Add to visitor log (Guest, Family, Maintenance, Service)
-      const newVisitor = this.visitorService.addVisitor({
-        name: visitor.name,
-        phone: visitor.phone,
-        purpose: visitor.purpose,
-        flatNumber: visitor.flatNumber,
-        vehicleNumber: visitor.vehicleNumber
-      });
-      // Mark as entered directly since pre-approved
-      this.visitorService.markEntered(newVisitor.id);
-    }
-    
-    // Mark pre-approval as used
-    this.preApproveService.markAsEntered(visitor.id);
+  allowEntry(visitor: any) {
+    this.apiService.updatePreApprovedStatus(visitor.id, 'Inside').subscribe({
+      next: () => {
+        this.snackBar.open('Entry allowed!', 'Close', { duration: 3000 });
+        this.loadPreApproved();
+      },
+      error: () => this.snackBar.open('Failed to allow entry', 'Close', { duration: 3000 })
+    });
+  }
+
+  markExit(visitor: any) {
+    this.apiService.updatePreApprovedStatus(visitor.id, 'Exited').subscribe({
+      next: () => {
+        this.snackBar.open('Exit recorded!', 'Close', { duration: 3000 });
+        this.loadPreApproved();
+        this.loadHistory();
+      },
+      error: () => this.snackBar.open('Failed to record exit', 'Close', { duration: 3000 })
+    });
   }
 }

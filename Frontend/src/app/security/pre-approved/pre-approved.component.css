@@ -32,3 +32,67 @@ td.mat-cell { padding: 12px 8px; }
 @media (max-width: 768px) {
   .page-header { flex-direction: column; gap: 16px; align-items: flex-start; }
 }
+
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.active, .status-badge.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.inside {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-badge.exited {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.completed {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+
+.history-card {
+  margin-top: 30px;
+}
+
+.history-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-card h2 mat-icon {
+  color: #64748b;
+}

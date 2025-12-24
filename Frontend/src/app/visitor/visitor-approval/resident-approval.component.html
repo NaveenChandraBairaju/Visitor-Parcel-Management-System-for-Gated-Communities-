@@ -37,28 +37,24 @@
         <th mat-header-cell *matHeaderCellDef>Visitor Name</th>
         <td mat-cell *matCellDef="let v">{{v.name}}</td>
       </ng-container>
-      <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef>Phone</th>
-        <td mat-cell *matCellDef="let v">{{v.phone}}</td>
-      </ng-container>
       <ng-container matColumnDef="purpose">
         <th mat-header-cell *matHeaderCellDef>Purpose</th>
         <td mat-cell *matCellDef="let v">{{v.purpose}}</td>
       </ng-container>
       <ng-container matColumnDef="checkIn">
         <th mat-header-cell *matHeaderCellDef>Check In</th>
-        <td mat-cell *matCellDef="let v">{{v.checkIn}}</td>
+        <td mat-cell *matCellDef="let v">{{v.created_at | date:'short'}}</td>
       </ng-container>
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>Status</th>
         <td mat-cell *matCellDef="let v">
-          <span class="status-badge" [ngClass]="'status-' + v.status">{{v.status}}</span>
+          <span class="status-badge" [ngClass]="'status-' + v.status.toLowerCase().replace(' ', '-')">{{v.status}}</span>
         </td>
       </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let v">
-          @if (v.status === 'waiting') {
+          @if (v.status === 'Waiting for Approval' || v.status === 'New') {
             <div class="action-buttons">
               <button mat-raised-button color="primary" (click)="approveVisitor(v)">
                 <mat-icon>check</mat-icon> Approve
@@ -68,13 +64,13 @@
               </button>
             </div>
           }
-          @if (v.status === 'entered' || v.status === 'approved') {
+          @if (v.status === 'Entered' || v.status === 'Approved') {
             <span class="approved-text"><mat-icon>check_circle</mat-icon> Approved</span>
           }
-          @if (v.status === 'rejected') {
+          @if (v.status === 'Rejected') {
             <span class="rejected-text"><mat-icon>cancel</mat-icon> Rejected</span>
           }
-          @if (v.status === 'exited') {
+          @if (v.status === 'Exited') {
             <span class="exited-text"><mat-icon>logout</mat-icon> Exited</span>
           }
         </td>

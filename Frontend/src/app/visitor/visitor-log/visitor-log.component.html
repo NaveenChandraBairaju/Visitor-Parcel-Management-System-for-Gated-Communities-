@@ -35,8 +35,12 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Visiting Flat/Unit</mat-label>
-        <input matInput [(ngModel)]="visitor.flatNumber" placeholder="e.g., A-101" required>
+        <mat-label>Select Resident</mat-label>
+        <mat-select [(ngModel)]="visitor.residentId" required>
+          @for (resident of residents; track resident.id) {
+            <mat-option [value]="resident.id">{{resident.name}} - {{resident.flat_number}}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -52,8 +56,8 @@
 
       <div class="form-actions">
         <button mat-stroked-button (click)="clearForm()">Clear</button>
-        <button mat-raised-button color="primary" (click)="submitVisitor()">
-          <mat-icon>check</mat-icon> Submit
+        <button mat-raised-button color="primary" (click)="submitVisitor()" [disabled]="isLoading">
+          <mat-icon>check</mat-icon> {{ isLoading ? 'Submitting...' : 'Submit' }}
         </button>
       </div>
     </div>
@@ -67,7 +71,7 @@
         </ng-container>
         <ng-container matColumnDef="phone">
           <th mat-header-cell *matHeaderCellDef>Phone</th>
-          <td mat-cell *matCellDef="let v">{{v.phone}}</td>
+          <td mat-cell *matCellDef="let v">{{v.phone || '-'}}</td>
         </ng-container>
         <ng-container matColumnDef="purpose">
           <th mat-header-cell *matHeaderCellDef>Purpose</th>
@@ -75,12 +79,12 @@
         </ng-container>
         <ng-container matColumnDef="flatNumber">
           <th mat-header-cell *matHeaderCellDef>Flat</th>
-          <td mat-cell *matCellDef="let v">{{v.flatNumber}}</td>
+          <td mat-cell *matCellDef="let v">{{v.flat_number}}</td>
         </ng-container>
         <ng-container matColumnDef="checkIn">
-          <th mat-header-cell *matHeaderCellDef>Check In</th>
+          <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let v">
-            <span class="time-badge">{{v.checkIn}}</span>
+            <span class="time-badge">{{v.status}}</span>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

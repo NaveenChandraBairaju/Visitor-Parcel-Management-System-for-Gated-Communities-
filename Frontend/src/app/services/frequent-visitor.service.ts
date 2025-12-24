@@ -15,15 +15,9 @@ export interface FrequentVisitor {
   providedIn: 'root'
 })
 export class FrequentVisitorService {
-  private nextId = 6;
+  private nextId = 1;
   
-  private frequentVisitors = new BehaviorSubject<FrequentVisitor[]>([
-    { id: 1, name: 'Rajesh Kumar', phone: '9876543210', relation: 'Friend', flatNumber: 'A-101', visits: 15, lastVisit: '17 Dec 2025' },
-    { id: 2, name: 'Meera Patel', phone: '9876543211', relation: 'Family', flatNumber: 'A-101', visits: 28, lastVisit: '16 Dec 2025' },
-    { id: 3, name: 'Suresh - Maid', phone: '9876543212', relation: 'Domestic Help', flatNumber: 'A-101', visits: 45, lastVisit: '18 Dec 2025' },
-    { id: 4, name: 'Ravi - Driver', phone: '9876543213', relation: 'Driver', flatNumber: 'A-101', visits: 60, lastVisit: '18 Dec 2025' },
-    { id: 5, name: 'Amazon Delivery', phone: '1800123456', relation: 'Delivery', flatNumber: 'A-101', visits: 12, lastVisit: '15 Dec 2025' }
-  ]);
+  private frequentVisitors = new BehaviorSubject<FrequentVisitor[]>([]);
 
   frequentVisitors$ = this.frequentVisitors.asObservable();
 

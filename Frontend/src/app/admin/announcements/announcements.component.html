@@ -1,31 +1,28 @@
 <div class="announcements-page">
   <!-- Header -->
   <div class="page-header">
-    <h1>Community Announcements</h1>
-    <p>Send notices and updates to residents and security</p>
+    <h1><mat-icon>campaign</mat-icon> Community Announcements</h1>
+    <p>Create and manage notices for residents and security personnel</p>
   </div>
 
   <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card">
-      <mat-icon class="icon-purple">campaign</mat-icon>
+      <div class="icon-wrap purple">
+        <mat-icon>notifications_active</mat-icon>
+      </div>
       <div class="stat-info">
-        <span class="stat-num">{{announcements.length}}</span>
-        <span class="stat-label">Total</span>
+        <span class="stat-num">{{totalCount}}</span>
+        <span class="stat-label">Total Announcements</span>
       </div>
     </div>
     <div class="stat-card">
-      <mat-icon class="icon-red">error</mat-icon>
+      <div class="icon-wrap red">
+        <mat-icon>priority_high</mat-icon>
+      </div>
       <div class="stat-info">
         <span class="stat-num">{{highPriorityCount}}</span>
         <span class="stat-label">High Priority</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <mat-icon class="icon-green">schedule</mat-icon>
-      <div class="stat-info">
-        <span class="stat-num">{{recentCount}}</span>
-        <span class="stat-label">This Week</span>
       </div>
     </div>
   </div>
@@ -35,51 +32,55 @@
     <!-- Form Section -->
     <div class="form-section">
       <div class="section-title">
-        <mat-icon>edit</mat-icon>
-        <span>New Announcement</span>
+        <mat-icon>add_circle</mat-icon>
+        <span>Create New Announcement</span>
       </div>
       
       <div class="form-body">
         <mat-form-field appearance="outline">
           <mat-label>Title</mat-label>
-          <input matInput [(ngModel)]="announcement.title" placeholder="Enter title">
+          <input matInput [(ngModel)]="announcement.title" placeholder="Enter announcement title">
+          <mat-icon matPrefix>title</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Message</mat-label>
-          <textarea matInput [(ngModel)]="announcement.message" rows="3" placeholder="Enter message"></textarea>
+          <textarea matInput [(ngModel)]="announcement.message" rows="4" placeholder="Write your announcement message here..."></textarea>
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Priority</mat-label>
             <mat-select [(ngModel)]="announcement.priority">
-              <mat-option value="low">Low</mat-option>
-              <mat-option value="normal">Normal</mat-option>
-              <mat-option value="high">High</mat-option>
+              <mat-option value="low">🔵 Low</mat-option>
+              <mat-option value="normal">🟡 Normal</mat-option>
+              <mat-option value="high">🔴 High</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Audience</mat-label>
             <mat-select [(ngModel)]="announcement.audience">
-              <mat-option value="all">All</mat-option>
-              <mat-option value="residents">Residents</mat-option>
-              <mat-option value="security">Security</mat-option>
+              <mat-option value="All">👥 Everyone</mat-option>
+              <mat-option value="Residents">🏠 Residents Only</mat-option>
+              <mat-option value="Security">🛡️ Security Only</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         @if (showError && !isFormValid) {
           <div class="error-msg">
-            <mat-icon>warning</mat-icon> Fill in title and message
+            <mat-icon>error</mat-icon> Please fill in both title and message
           </div>
         }
 
         <div class="form-actions">
-          <button mat-stroked-button (click)="clearForm()">Clear</button>
-          <button mat-raised-button color="primary" (click)="submitAnnouncement()">
-            <mat-icon>send</mat-icon> Publish
+          <button mat-stroked-button (click)="clearForm()">
+            <mat-icon>clear</mat-icon> Clear
+          </button>
+          <button mat-raised-button color="primary" (click)="submitAnnouncement()" [disabled]="isLoading">
+            <mat-icon>{{ isLoading ? 'hourglass_empty' : 'send' }}</mat-icon>
+            {{ isLoading ? 'Publishing...' : 'Publish' }}
           </button>
         </div>
       </div>
@@ -88,30 +89,36 @@
     <!-- List Section -->
     <div class="list-section">
       <div class="section-title">
-        <mat-icon>list</mat-icon>
-        <span>All Announcements</span>
+        <mat-icon>format_list_bulleted</mat-icon>
+        <span>All Announcements ({{announcements.length}})</span>
       </div>
 
       @if (announcements.length === 0) {
         <div class="empty-state">
           <mat-icon>inbox</mat-icon>
-          <p>No announcements</p>
+          <p>No announcements yet. Create your first one!</p>
         </div>
       } @else {
-        <div class="announcements-grid">
+        <div class="announcements-list">
           @for (item of announcements; track item.id) {
             <div class="card" [class]="'priority-' + item.priority">
               <div class="card-header">
                 <span class="badge" [class]="'badge-' + item.priority">{{item.priority}}</span>
-                <button class="delete-btn" (click)="deleteAnnouncement(item)">
-                  <mat-icon>delete</mat-icon>
+                <button class="delete-btn" (click)="deleteAnnouncement(item)" title="Delete">
+                  <mat-icon>delete_outline</mat-icon>
                 </button>
               </div>
               <h3>{{item.title}}</h3>
               <p>{{item.message}}</p>
               <div class="card-meta">
-                <span><mat-icon>people</mat-icon>{{item.audience}}</span>
-                <span><mat-icon>event</mat-icon>{{item.date}}</span>
+                <span>
+                  <mat-icon>groups</mat-icon>
+                  {{item.audience === 'All' ? 'Everyone' : item.audience}}
+                </span>
+                <span>
+                  <mat-icon>schedule</mat-icon>
+                  {{item.created_at | date:'MMM d, y, h:mm a'}}
+                </span>
               </div>
             </div>
           }

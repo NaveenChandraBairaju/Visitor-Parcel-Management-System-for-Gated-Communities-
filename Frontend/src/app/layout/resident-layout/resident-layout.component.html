@@ -24,12 +24,32 @@
         <mat-icon>event_available</mat-icon>
         Pre-Approve
       </a>
-      <a routerLink="/resident/frequent-visitors" routerLinkActive="active" mat-button>
-        <mat-icon>star</mat-icon>
-        Frequent Visitors
-      </a>
     </div>
     <div class="nav-right">
+      <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu">
+        <mat-icon [matBadge]="notificationCount" [matBadgeHidden]="notificationCount === 0" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+      </button>
+      <mat-menu #notificationMenu="matMenu" class="notification-menu">
+        <div class="notification-header">
+          <span>Notifications</span>
+        </div>
+        @if (notifications.length === 0) {
+          <div class="no-notifications">
+            <mat-icon>notifications_off</mat-icon>
+            <p>No new notifications</p>
+          </div>
+        } @else {
+          @for (notif of notifications; track notif.id) {
+            <button mat-menu-item class="notification-item" (click)="goToNotification(notif)">
+              <mat-icon [ngClass]="notif.type">{{notif.type === 'visitor' ? 'person' : 'inventory_2'}}</mat-icon>
+              <div class="notif-content">
+                <span class="notif-title">{{notif.title}}</span>
+                <span class="notif-time">{{notif.time}}</span>
+              </div>
+            </button>
+          }
+        }
+      </mat-menu>
       <button mat-icon-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
       </button>

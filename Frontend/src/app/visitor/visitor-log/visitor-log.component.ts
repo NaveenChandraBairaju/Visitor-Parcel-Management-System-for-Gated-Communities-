@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,27 +8,51 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { VisitorService, Visitor } from '../../services/visitor.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-visitor-log',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatCardModule, MatSelectModule, MatTableModule, MatIconModule
+    MatButtonModule, MatCardModule, MatSelectModule, MatTableModule, 
+    MatIconModule, MatSnackBarModule
   ],
   templateUrl: './visitor-log.component.html',
   styleUrl: './visitor-log.component.css'
 })
-export class VisitorLogComponent {
-  visitor = { name: '', phone: '', purpose: '', flatNumber: '', vehicleNumber: '' };
+export class VisitorLogComponent implements OnInit {
+  visitor = { name: '', phone: '', purpose: '', residentId: 0, vehicleNumber: '' };
   displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'checkIn'];
-  recentVisitors: Visitor[] = [];
+  recentVisitors: any[] = [];
+  residents: any[] = [];
   showError = false;
+  isLoading = false;
 
-  constructor(private visitorService: VisitorService) {
-    this.visitorService.visitors$.subscribe(list => {
-      this.recentVisitors = list.slice(0, 10);
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit() {
+    this.loadResidents();
+    this.loadRecentVisitors();
+  }
+
+  loadResidents() {
+    this.apiService.getResidents().subscribe({
+      next: (data) => this.residents = data,
+      error: (err) => console.error('Error loading residents:', err)
+    });
+  }
+
+  loadRecentVisitors() {
+    this.apiService.getAllVisitors().subscribe({
+      next: (data) => this.recentVisitors = data.slice(0, 10),
+      error: (err) => console.error('Error loading visitors:', err)
     });
   }
 
@@ -38,7 +62,7 @@ export class VisitorLogComponent {
       this.visitor.phone.length === 10 && 
       /^[0-9]{10}$/.test(this.visitor.phone) &&
       this.visitor.purpose &&
-      this.visitor.flatNumber.trim()
+      this.visitor.residentId
     );
   }
 
@@ -47,13 +71,35 @@ export class VisitorLogComponent {
       this.showError = true;
       return;
     }
-    this.visitorService.addVisitor(this.visitor);
-    this.clearForm();
-    this.showError = false;
+
+    this.isLoading = true;
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+    const visitorData = {
+      residentId: this.visitor.residentId,
+      securityGuardId: userData.id,
+      name: this.visitor.name,
+      phone: this.visitor.phone,
+      purpose: this.visitor.purpose,
+      vehicleDetails: this.visitor.vehicleNumber || null
+    };
+
+    this.apiService.logVisitor(visitorData).subscribe({
+      next: () => {
+        this.snackBar.open('Visitor logged successfully!', 'Close', { duration: 3000 });
+        this.clearForm();
+        this.loadRecentVisitors();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.error || 'Failed to log visitor', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
+    });
   }
 
   clearForm() {
-    this.visitor = { name: '', phone: '', purpose: '', flatNumber: '', vehicleNumber: '' };
+    this.visitor = { name: '', phone: '', purpose: '', residentId: 0, vehicleNumber: '' };
     this.showError = false;
   }
 }

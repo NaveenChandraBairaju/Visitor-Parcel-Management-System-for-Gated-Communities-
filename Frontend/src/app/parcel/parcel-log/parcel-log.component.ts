@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,47 +8,59 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { ParcelService, Parcel } from '../../services/parcel.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-parcel-log',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatCardModule, MatSelectModule, MatTableModule, MatIconModule
+    MatButtonModule, MatCardModule, MatSelectModule, MatTableModule, 
+    MatIconModule, MatSnackBarModule
   ],
   templateUrl: './parcel-log.component.html',
   styleUrl: './parcel-log.component.css'
 })
-export class ParcelLogComponent {
+export class ParcelLogComponent implements OnInit {
   parcel = { 
     courier: '', 
     name: '', 
-    recipientName: '', 
-    flatNumber: '', 
-    description: '',
-    deliveryPersonName: '',
-    deliveryPersonPhone: ''
+    residentId: 0, 
+    description: ''
   };
   displayedColumns = ['courier', 'name', 'flatNumber', 'receivedTime', 'deliveryStatus'];
-  recentParcels: Parcel[] = [];
+  recentParcels: any[] = [];
+  residents: any[] = [];
+  showError = false;
+  isLoading = false;
 
-  constructor(private parcelService: ParcelService) {
-    this.parcelService.parcels$.subscribe(list => {
-      this.recentParcels = list.slice(0, 10);
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+
+  ngOnInit() {
+    this.loadResidents();
+    this.loadRecentParcels();
+  }
+
+  loadResidents() {
+    this.apiService.getResidents().subscribe({
+      next: (data) => this.residents = data,
+      error: (err) => console.error('Error loading residents:', err)
     });
   }
 
-  showError = false;
+  loadRecentParcels() {
+    this.apiService.getAllParcels().subscribe({
+      next: (data) => this.recentParcels = data.slice(0, 10),
+      error: (err) => console.error('Error loading parcels:', err)
+    });
+  }
 
   get isFormValid(): boolean {
     return !!(
       this.parcel.courier && 
       this.parcel.name.trim() && 
-      this.parcel.flatNumber.trim() &&
-      this.parcel.deliveryPersonName.trim() &&
-      this.parcel.deliveryPersonPhone.length === 10 &&
-      /^[0-9]{10}$/.test(this.parcel.deliveryPersonPhone)
+      this.parcel.residentId
     );
   }
 
@@ -57,32 +69,37 @@ export class ParcelLogComponent {
       this.showError = true;
       return;
     }
-    this.parcelService.addParcel({
-      courier: this.parcel.courier,
-      name: this.parcel.name.trim(),
-      flatNumber: this.parcel.flatNumber.trim(),
-      recipientName: this.parcel.recipientName.trim(),
-      description: this.parcel.description,
-      deliveryPersonName: this.parcel.deliveryPersonName.trim(),
-      deliveryPersonPhone: this.parcel.deliveryPersonPhone
-    });
-    this.clearForm();
-    this.showError = false;
-  }
 
-  markDeliveryLeft(parcel: Parcel) {
-    this.parcelService.markDeliveryPersonLeft(parcel.id);
+    this.isLoading = true;
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+    const parcelData = {
+      residentId: this.parcel.residentId,
+      securityGuardId: userData.id,
+      name: `${this.parcel.courier} - ${this.parcel.name}`,
+      description: this.parcel.description || null
+    };
+
+    this.apiService.logParcel(parcelData).subscribe({
+      next: () => {
+        this.snackBar.open('Parcel logged successfully!', 'Close', { duration: 3000 });
+        this.clearForm();
+        this.loadRecentParcels();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.error || 'Failed to log parcel', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
+    });
   }
 
   clearForm() {
     this.parcel = { 
       courier: '', 
       name: '', 
-      recipientName: '', 
-      flatNumber: '', 
-      description: '',
-      deliveryPersonName: '',
-      deliveryPersonPhone: ''
+      residentId: 0, 
+      description: ''
     };
     this.showError = false;
   }

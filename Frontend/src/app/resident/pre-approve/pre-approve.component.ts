@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PreApproveService, PreApprovedVisitor } from '../../services/pre-approve.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-pre-approve',
@@ -18,26 +19,34 @@ import { PreApproveService, PreApprovedVisitor } from '../../services/pre-approv
   imports: [
     CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule, MatSelectModule, MatTableModule,
-    MatDatepickerModule, MatNativeDateModule
+    MatDatepickerModule, MatNativeDateModule, MatSnackBarModule
   ],
   templateUrl: './pre-approve.component.html',
   styleUrl: './pre-approve.component.css'
 })
-export class PreApproveComponent {
+export class PreApproveComponent implements OnInit {
   visitor = { name: '', phone: '', purpose: '', expectedDate: null as Date | null, vehicleNumber: '' };
   displayedColumns = ['name', 'phone', 'purpose', 'expectedDate', 'status', 'actions'];
-  preApprovedList: PreApprovedVisitor[] = [];
+  preApprovedList: any[] = [];
   showError = false;
+  isLoading = false;
+  residentId = 0;
 
-  // Simulated resident info (would come from auth service in real app)
-  residentFlat = 'A-101';
-  residentName = 'Rahul Sharma';
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
 
-  constructor(private preApproveService: PreApproveService) {
-    this.preApproveService.preApprovedList$.subscribe(list => {
-      // Filter to show only this resident's pre-approvals
-      this.preApprovedList = list.filter(v => v.flatNumber === this.residentFlat);
-    });
+  ngOnInit() {
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.residentId = userData.id;
+    this.loadPreApproved();
+  }
+
+  loadPreApproved() {
+    if (this.residentId) {
+      this.apiService.getPreApprovedByResident(this.residentId).subscribe({
+        next: (data) => this.preApprovedList = data,
+        error: (err) => console.error('Error loading pre-approved:', err)
+      });
+    }
   }
 
   get isFormValid(): boolean {
@@ -55,17 +64,31 @@ export class PreApproveComponent {
       this.showError = true;
       return;
     }
-    
+
+    this.isLoading = true;
     const expectedDate = this.visitor.expectedDate 
-      ? new Date(this.visitor.expectedDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-      : 'Today';
-    
-    this.preApproveService.addPreApproval(
-      { ...this.visitor, expectedDate },
-      this.residentFlat,
-      this.residentName
-    );
-    this.clearForm();
+      ? new Date(this.visitor.expectedDate).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0];
+
+    this.apiService.addPreApproved({
+      residentId: this.residentId,
+      name: this.visitor.name,
+      phone: this.visitor.phone,
+      purpose: this.visitor.purpose,
+      expectedDate: expectedDate,
+      vehicleNumber: this.visitor.vehicleNumber || null
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Pre-approval added successfully!', 'Close', { duration: 3000 });
+        this.clearForm();
+        this.loadPreApproved();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.snackBar.open('Failed to add pre-approval', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
+    });
   }
 
   clearForm() {
@@ -73,7 +96,13 @@ export class PreApproveComponent {
     this.showError = false;
   }
 
-  cancelApproval(item: PreApprovedVisitor) {
-    this.preApproveService.cancelApproval(item.id);
+  cancelApproval(item: any) {
+    this.apiService.updatePreApprovedStatus(item.id, 'Cancelled').subscribe({
+      next: () => {
+        this.snackBar.open('Pre-approval cancelled', 'Close', { duration: 3000 });
+        this.loadPreApproved();
+      },
+      error: () => this.snackBar.open('Failed to cancel', 'Close', { duration: 3000 })
+    });
   }
 }

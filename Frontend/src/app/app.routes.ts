@@ -44,10 +44,6 @@ export const routes: Routes = [
         path: 'pre-approve',
         loadComponent: () => import('./resident/pre-approve/pre-approve.component').then(m => m.PreApproveComponent)
       },
-      {
-        path: 'frequent-visitors',
-        loadComponent: () => import('./resident/frequent-visitors/frequent-visitors.component').then(m => m.FrequentVisitorsComponent)
-      },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
@@ -105,6 +101,10 @@ export const routes: Routes = [
       {
         path: 'parcels',
         loadComponent: () => import('./security/all-parcels/all-parcels.component').then(m => m.AllParcelsComponent)
+      },
+      {
+        path: 'pre-approved',
+        loadComponent: () => import('./security/pre-approved/pre-approved.component').then(m => m.PreApprovedComponent)
       },
       {
         path: 'announcements',

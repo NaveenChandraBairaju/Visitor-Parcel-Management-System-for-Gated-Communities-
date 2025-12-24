@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { VisitorService } from '../../services/visitor.service';
-import { ParcelService } from '../../services/parcel.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,29 +13,45 @@ import { ParcelService } from '../../services/parcel.service';
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css'
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
   adminName = 'Admin';
-  totalResidents = 248;
+  totalResidents = 0;
   totalVisitors = 0;
   totalParcels = 0;
-  activeGuards = 8;
+  activeGuards = 0;
   pendingVisitorApprovals = 0;
   pendingParcelApprovals = 0;
-  todayVisitors = 0;
+  recentVisitors: any[] = [];
+  recentParcels: any[] = [];
 
-  constructor(
-    private visitorService: VisitorService,
-    private parcelService: ParcelService
-  ) {
-    this.visitorService.visitors$.subscribe(list => {
-      this.totalVisitors = list.length;
-      this.pendingVisitorApprovals = list.filter(v => v.status === 'waiting').length;
-      this.todayVisitors = list.filter(v => v.date === 'Today').length;
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.loadStats();
+    this.loadRecentHistory();
+  }
+
+  loadStats() {
+    this.apiService.getDashboardStats().subscribe({
+      next: (stats) => {
+        this.totalResidents = stats.totalUsers;
+        this.totalVisitors = stats.totalVisitors;
+        this.totalParcels = stats.totalParcels;
+        this.pendingVisitorApprovals = stats.pendingVisitors;
+        this.pendingParcelApprovals = stats.pendingParcels;
+      },
+      error: (err) => console.error('Error loading stats:', err)
     });
+  }
 
-    this.parcelService.parcels$.subscribe(list => {
-      this.totalParcels = list.length;
-      this.pendingParcelApprovals = list.filter(p => p.status === 'Pending').length;
+  loadRecentHistory() {
+    this.apiService.getRecentVisitorHistory().subscribe({
+      next: (data) => this.recentVisitors = data.slice(0, 5),
+      error: (err) => console.error('Error loading visitor history:', err)
+    });
+    this.apiService.getRecentParcelHistory().subscribe({
+      next: (data) => this.recentParcels = data.slice(0, 5),
+      error: (err) => console.error('Error loading parcel history:', err)
     });
   }
 }

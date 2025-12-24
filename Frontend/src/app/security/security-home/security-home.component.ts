@@ -1,14 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { VisitorService } from '../../services/visitor.service';
-import { ParcelService } from '../../services/parcel.service';
-import { PreApproveService } from '../../services/pre-approve.service';
-import { ActivityService, Activity } from '../../services/activity.service';
-import { AnnouncementService, Announcement } from '../../services/announcement.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-security-home',
@@ -17,58 +13,56 @@ import { AnnouncementService, Announcement } from '../../services/announcement.s
   templateUrl: './security-home.component.html',
   styleUrl: './security-home.component.css'
 })
-export class SecurityHomeComponent {
+export class SecurityHomeComponent implements OnInit {
   userName = 'Security Guard';
-  todayVisitors = 0;
-  todayParcels = 0;
-  pendingEntry = 0;
-  recentActivities: Activity[] = [];
-  announcements: Announcement[] = [];
+  totalVisitors = 0;
+  totalParcels = 0;
+  pendingApprovals = 0;
+  announcements: any[] = [];
+  recentVisitors: any[] = [];
+  recentParcels: any[] = [];
 
-  constructor(
-    private visitorService: VisitorService,
-    private parcelService: ParcelService,
-    private preApproveService: PreApproveService,
-    private activityService: ActivityService,
-    private announcementService: AnnouncementService
-  ) {
-    this.visitorService.visitors$.subscribe(() => {
-      this.todayVisitors = this.visitorService.getTodayCount();
-      this.pendingEntry = this.visitorService.getApprovedVisitors().length;
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.userName = userData.fullName || 'Security Guard';
+    this.loadStats();
+    this.loadAnnouncements();
+    this.loadRecentHistory();
+  }
+
+  loadStats() {
+    this.apiService.getAllVisitors().subscribe({
+      next: (data) => {
+        this.totalVisitors = data.length;
+        this.pendingApprovals = data.filter(v => v.status === 'Waiting for Approval' || v.status === 'New').length;
+      },
+      error: () => {}
     });
 
-    this.parcelService.parcels$.subscribe(() => {
-      this.todayParcels = this.parcelService.getTodayCount();
-    });
-
-    this.activityService.activities$.subscribe(() => {
-      this.recentActivities = this.activityService.getRecent(5);
-    });
-
-    // Get announcements for security
-    this.announcementService.announcements$.subscribe(list => {
-      this.announcements = list.filter(a => 
-        a.audience === 'All Residents' || a.audience === 'Security Guards'
-      ).slice(0, 3);
+    this.apiService.getAllParcels().subscribe({
+      next: (data) => this.totalParcels = data.length,
+      error: () => {}
     });
   }
 
-  getActivityIcon(type: Activity['type']): string {
-    const icons: Record<Activity['type'], string> = {
-      visitor_approved: 'check_circle',
-      visitor_rejected: 'cancel',
-      visitor_entered: 'login',
-      visitor_exited: 'logout',
-      parcel_received: 'inventory_2',
-      parcel_collected: 'check_circle'
-    };
-    return icons[type];
+  loadAnnouncements() {
+    this.apiService.getAnnouncementsByAudience('Security').subscribe({
+      next: (data) => this.announcements = data.slice(0, 3),
+      error: (err) => console.error('Error loading announcements:', err)
+    });
   }
 
-  getActivityClass(type: Activity['type']): string {
-    if (type.includes('entered')) return 'entry';
-    if (type.includes('exited')) return 'exit';
-    if (type.includes('parcel')) return 'parcel';
-    return 'entry';
+  loadRecentHistory() {
+    this.apiService.getRecentVisitorHistory().subscribe({
+      next: (data) => this.recentVisitors = data.slice(0, 5),
+      error: () => {}
+    });
+
+    this.apiService.getRecentParcelHistory().subscribe({
+      next: (data) => this.recentParcels = data.slice(0, 5),
+      error: () => {}
+    });
   }
 }

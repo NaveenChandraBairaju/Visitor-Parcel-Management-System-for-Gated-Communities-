@@ -1,15 +1,12 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth.guard';
-import { roleGuard } from './guards/role.guard';
+import { residentGuard, securityGuard, adminGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  // Home Page
   {
     path: '',
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
     pathMatch: 'full'
   },
-  // Auth Pages
   {
     path: 'login',
     loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
@@ -22,11 +19,10 @@ export const routes: Routes = [
     path: 'unauthorized',
     loadComponent: () => import('./auth/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
-  // Resident Portal
   {
     path: 'resident',
-    loadComponent: () => import('./layout/resident-layout/resident-layout.component').then(m => m.ResidentLayoutComponent),
-    canActivate: [authGuard, roleGuard(['resident'])],
+    loadComponent: () => import('./resident/resident-layout/resident-layout.component').then(m => m.ResidentLayoutComponent),
+    canActivate: [residentGuard],
     children: [
       {
         path: 'home',
@@ -34,24 +30,27 @@ export const routes: Routes = [
       },
       {
         path: 'visitor-approval',
-        loadComponent: () => import('./visitor/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
+        loadComponent: () => import('./resident/visitor-approval/resident-approval.component').then(m => m.ResidentApprovalComponent)
       },
       {
         path: 'parcel-tracking',
-        loadComponent: () => import('./parcel/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
+        loadComponent: () => import('./resident/parcel-tracking/resident-parcel.component').then(m => m.ResidentParcelComponent)
       },
       {
         path: 'pre-approve',
         loadComponent: () => import('./resident/pre-approve/pre-approve.component').then(m => m.PreApproveComponent)
       },
+      {
+        path: 'frequent-visitors',
+        loadComponent: () => import('./resident/frequent-visitors/frequent-visitors.component').then(m => m.FrequentVisitorsComponent)
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
-  // Security Guard Portal
   {
     path: 'security',
-    loadComponent: () => import('./layout/security-layout/security-layout.component').then(m => m.SecurityLayoutComponent),
-    canActivate: [authGuard, roleGuard(['security'])],
+    loadComponent: () => import('./security/security-layout/security-layout.component').then(m => m.SecurityLayoutComponent),
+    canActivate: [securityGuard],
     children: [
       {
         path: 'home',
@@ -59,11 +58,11 @@ export const routes: Routes = [
       },
       {
         path: 'visitor-log',
-        loadComponent: () => import('./visitor/visitor-log/visitor-log.component').then(m => m.VisitorLogComponent)
+        loadComponent: () => import('./security/visitor-log/visitor-log.component').then(m => m.VisitorLogComponent)
       },
       {
         path: 'parcel-log',
-        loadComponent: () => import('./parcel/parcel-log/parcel-log.component').then(m => m.ParcelLogComponent)
+        loadComponent: () => import('./security/parcel-log/parcel-log.component').then(m => m.ParcelLogComponent)
       },
       {
         path: 'all-visitors',
@@ -77,14 +76,17 @@ export const routes: Routes = [
         path: 'pre-approved',
         loadComponent: () => import('./security/pre-approved/pre-approved.component').then(m => m.PreApprovedComponent)
       },
+      {
+        path: 'frequent-visitors',
+        loadComponent: () => import('./security/frequent-visitors/frequent-visitors.component').then(m => m.SecurityFrequentVisitorsComponent)
+      },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
-  // Admin Portal
   {
     path: 'admin',
-    loadComponent: () => import('./layout/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
-    canActivate: [authGuard, roleGuard(['admin'])],
+    loadComponent: () => import('./admin/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    canActivate: [adminGuard],
     children: [
       {
         path: 'dashboard',
@@ -113,6 +115,5 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-  // Fallback
   { path: '**', redirectTo: '' }
 ];

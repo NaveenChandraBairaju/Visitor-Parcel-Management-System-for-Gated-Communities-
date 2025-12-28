@@ -27,7 +27,6 @@ export class ResidentLayoutComponent implements OnInit, OnDestroy {
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
     this.residentId = userData.id;
     this.loadNotifications();
-    // Check for new notifications every 30 seconds
     this.intervalId = setInterval(() => this.loadNotifications(), 30000);
   }
 
@@ -40,7 +39,6 @@ export class ResidentLayoutComponent implements OnInit, OnDestroy {
   loadNotifications() {
     if (!this.residentId) return;
 
-    // Get pending visitors
     this.apiService.getPendingVisitors(this.residentId).subscribe({
       next: (visitors) => {
         const visitorNotifs = visitors.map(v => ({
@@ -51,7 +49,6 @@ export class ResidentLayoutComponent implements OnInit, OnDestroy {
           route: '/resident/visitor-approval'
         }));
 
-        // Get pending parcels
         this.apiService.getParcelsByResident(this.residentId).subscribe({
           next: (parcels) => {
             const parcelNotifs = parcels

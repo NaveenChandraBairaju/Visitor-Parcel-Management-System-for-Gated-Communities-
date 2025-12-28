@@ -12,7 +12,7 @@ import { ApiService } from '../../services/api.service';
   standalone: true,
   imports: [CommonModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './resident-parcel.component.html',
-  styleUrl: './resident-parcel.component.css'
+  styleUrls: ['./resident-parcel.component.css']
 })
 export class ResidentParcelComponent implements OnInit {
   displayedColumns = ['courier', 'name', 'receivedDate', 'status', 'actions'];
@@ -59,6 +59,17 @@ export class ResidentParcelComponent implements OnInit {
         this.loadParcels();
       },
       error: () => this.snackBar.open('Failed to acknowledge parcel', 'Close', { duration: 3000 })
+    });
+  }
+
+  collectParcel(parcel: any) {
+    this.apiService.updateParcelStatus(parcel.id, 'Collected').subscribe({
+      next: () => {
+        this.snackBar.open('Parcel collected successfully!', 'Close', { duration: 3000 });
+        this.loadParcels();
+        this.loadRecentHistory();
+      },
+      error: () => this.snackBar.open('Failed to collect parcel', 'Close', { duration: 3000 })
     });
   }
 }

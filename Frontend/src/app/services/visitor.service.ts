@@ -32,7 +32,6 @@ export class VisitorService {
 
 
 
-  // Security logs new visitor - status: waiting (for resident approval)
   addVisitor(visitor: Partial<Visitor>) {
     const current = this.visitors.value;
     const newVisitor: Visitor = {
@@ -52,7 +51,6 @@ export class VisitorService {
     return newVisitor;
   }
 
-  // Resident approves visitor
   approveVisitor(id: number) {
     const visitor = this.visitors.value.find(v => v.id === id);
     if (visitor) {
@@ -61,7 +59,6 @@ export class VisitorService {
     this.updateStatus(id, 'approved');
   }
 
-  // Resident rejects visitor
   rejectVisitor(id: number) {
     const visitor = this.visitors.value.find(v => v.id === id);
     if (visitor) {
@@ -70,7 +67,6 @@ export class VisitorService {
     this.updateStatus(id, 'rejected');
   }
 
-  // Security marks visitor as entered - also records visit for frequent visitors
   markEntered(id: number) {
     const visitor = this.visitors.value.find(v => v.id === id);
     if (visitor) {
@@ -80,7 +76,6 @@ export class VisitorService {
     this.updateStatus(id, 'entered');
   }
 
-  // Security marks visitor as exited
   markExited(id: number) {
     const visitor = this.visitors.value.find(v => v.id === id);
     if (visitor) {

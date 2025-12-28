@@ -49,7 +49,6 @@ export class AuthService {
 
   getUserRole(): string {
     if (!this.isBrowser) return 'resident';
-    // Reload user if not loaded but localStorage has data
     if (!this.currentUser.value && localStorage.getItem('userData')) {
       this.loadUser();
     }
@@ -61,7 +60,6 @@ export class AuthService {
     return localStorage.getItem('isAuthenticated') === 'true';
   }
 
-  // Call this after login to refresh the user state
   refreshUser(): void {
     if (this.isBrowser) {
       this.loadUser();

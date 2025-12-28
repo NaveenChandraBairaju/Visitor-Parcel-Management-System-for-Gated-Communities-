@@ -47,7 +47,7 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Phone Number</mat-label>
-          <input matInput [(ngModel)]="phone" name="phone" maxlength="10" required>
+          <input matInput [(ngModel)]="phone" name="phone" (input)="onPhoneInput($event)" maxlength="10" required>
           <mat-icon matPrefix>phone</mat-icon>
           @if (phone && phone.length > 0 && phone.length < 10) {
             <mat-hint class="error-hint">Phone must be 10 digits ({{phone.length}}/10)</mat-hint>
@@ -99,7 +99,7 @@
       </div>
 
       <mat-checkbox class="terms-checkbox" [(ngModel)]="agreeTerms" name="agreeTerms">
-        I agree to the <a href="#">Terms & Conditions</a>
+        I agree to the Terms & Conditions
       </mat-checkbox>
 
       @if (showError && errorMessage) {

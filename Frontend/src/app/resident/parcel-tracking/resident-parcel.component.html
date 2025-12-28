@@ -18,7 +18,7 @@
       <mat-icon>check_circle</mat-icon>
       <div class="stat-info">
         <span class="stat-num">{{acknowledgedCount}}</span>
-        <span class="stat-label">Acknowledged</span>
+        <span class="stat-label">Approved</span>
       </div>
     </div>
     <div class="stat-card entered">
@@ -49,7 +49,7 @@
         <td mat-cell *matCellDef="let p">{{p.description || '-'}}</td>
       </ng-container>
       <ng-container matColumnDef="receivedDate">
-        <th mat-header-cell *matHeaderCellDef>Received Date</th>
+        <th mat-header-cell *matHeaderCellDef>Check In</th>
         <td mat-cell *matCellDef="let p">{{p.created_at | date:'short'}}</td>
       </ng-container>
       <ng-container matColumnDef="status">
@@ -63,14 +63,16 @@
         <td mat-cell *matCellDef="let p">
           @if (p.status === 'Received') {
             <button mat-raised-button color="primary" (click)="acknowledgeParcel(p)">
-              <mat-icon>check</mat-icon> Acknowledge
+              <mat-icon>check</mat-icon> Approve
             </button>
           }
           @if (p.status === 'Acknowledged') {
             <span class="waiting-text"><mat-icon>schedule</mat-icon> Waiting for Entry</span>
           }
           @if (p.status === 'Entered') {
-            <span class="entered-text"><mat-icon>login</mat-icon> Inside - Collect Now</span>
+            <button mat-raised-button color="accent" (click)="collectParcel(p)">
+              <mat-icon>inventory</mat-icon> Collect Now
+            </button>
           }
           @if (p.status === 'Exited' || p.status === 'Collected') {
             <span class="collected-text"><mat-icon>verified</mat-icon> Collected</span>
@@ -89,7 +91,6 @@
     }
   </div>
 
-  <!-- Recent History -->
   @if (recentHistory.length > 0) {
     <div class="history-section">
       <h2><mat-icon>history</mat-icon> Recent History</h2>

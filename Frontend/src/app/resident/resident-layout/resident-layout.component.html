@@ -1,5 +1,4 @@
 <div class="layout-container">
-  <!-- Top Navbar -->
   <nav class="top-navbar resident-nav">
     <div class="nav-left">
       <div class="brand">
@@ -23,6 +22,10 @@
       <a routerLink="/resident/pre-approve" routerLinkActive="active" mat-button>
         <mat-icon>event_available</mat-icon>
         Pre-Approve
+      </a>
+      <a routerLink="/resident/frequent-visitors" routerLinkActive="active" mat-button>
+        <mat-icon>people</mat-icon>
+        Frequent Visitors
       </a>
     </div>
     <div class="nav-right">
@@ -61,7 +64,6 @@
     </div>
   </nav>
 
-  <!-- Content -->
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>

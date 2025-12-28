@@ -1,11 +1,9 @@
 <div class="announcements-page">
-  <!-- Header -->
   <div class="page-header">
     <h1><mat-icon>campaign</mat-icon> Community Announcements</h1>
     <p>Create and manage notices for residents and security personnel</p>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card">
       <div class="icon-wrap purple">
@@ -16,20 +14,9 @@
         <span class="stat-label">Total Announcements</span>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="icon-wrap red">
-        <mat-icon>priority_high</mat-icon>
-      </div>
-      <div class="stat-info">
-        <span class="stat-num">{{highPriorityCount}}</span>
-        <span class="stat-label">High Priority</span>
-      </div>
-    </div>
   </div>
 
-  <!-- Main Content -->
   <div class="main-grid">
-    <!-- Form Section -->
     <div class="form-section">
       <div class="section-title">
         <mat-icon>add_circle</mat-icon>
@@ -52,18 +39,18 @@
           <mat-form-field appearance="outline">
             <mat-label>Priority</mat-label>
             <mat-select [(ngModel)]="announcement.priority">
-              <mat-option value="low">🔵 Low</mat-option>
-              <mat-option value="normal">🟡 Normal</mat-option>
-              <mat-option value="high">🔴 High</mat-option>
+              <mat-option value="low">Low</mat-option>
+              <mat-option value="normal">Normal</mat-option>
+              <mat-option value="high">High</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Audience</mat-label>
             <mat-select [(ngModel)]="announcement.audience">
-              <mat-option value="All">👥 Everyone</mat-option>
-              <mat-option value="Residents">🏠 Residents Only</mat-option>
-              <mat-option value="Security">🛡️ Security Only</mat-option>
+              <mat-option value="All">Everyone</mat-option>
+              <mat-option value="Residents">Residents Only</mat-option>
+              <mat-option value="Security">Security Only</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -86,7 +73,6 @@
       </div>
     </div>
 
-    <!-- List Section -->
     <div class="list-section">
       <div class="section-title">
         <mat-icon>format_list_bulleted</mat-icon>
@@ -110,7 +96,7 @@
               </div>
               <h3>{{item.title}}</h3>
               <p>{{item.message}}</p>
-              <div class="card-meta">
+              <div class="card-info">
                 <span>
                   <mat-icon>groups</mat-icon>
                   {{item.audience === 'All' ? 'Everyone' : item.audience}}

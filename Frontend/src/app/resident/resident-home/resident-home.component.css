@@ -3,7 +3,6 @@
   margin: 0 auto;
 }
 
-/* Welcome Section */
 .welcome-section {
   display: flex;
   justify-content: space-between;
@@ -33,7 +32,7 @@
   opacity: 0.3;
 }
 
-/* Stats Row */
+
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -79,7 +78,6 @@
   color: #64748b;
 }
 
-/* Quick Actions */
 h2 {
   font-size: 24px;
   color: #1e3a5f;
@@ -147,7 +145,7 @@ h2 {
   font-weight: 600;
 }
 
-/* Announcements Section */
+
 .section-title {
   display: flex;
   align-items: center;
@@ -208,7 +206,9 @@ h2 {
   font-weight: 600;
   text-transform: uppercase;
 }
-.priority-badge.high { background: #fee2e2; color: #dc2626; }
+.priority-badge.high { 
+  background: #fee2e2; 
+  color: #dc2626; }
 
 .announcement-message {
   font-size: 14px;
@@ -217,24 +217,24 @@ h2 {
   line-height: 1.6;
 }
 
-.announcement-meta {
+.announcement-info {
   display: flex;
   gap: 16px;
   font-size: 12px;
   color: #94a3b8;
 }
-.announcement-meta span {
+.announcement-info span {
   display: flex;
   align-items: center;
   gap: 4px;
 }
-.announcement-meta mat-icon {
+.announcement-info mat-icon {
   font-size: 14px;
   width: 14px;
   height: 14px;
 }
 
-/* Activity List */
+
 .activity-list {
   background: #fff;
   border-radius: 16px;
@@ -322,7 +322,7 @@ h2 {
 }
 
 
-/* History Section */
+
 h2 mat-icon {
   vertical-align: middle;
   margin-right: 8px;

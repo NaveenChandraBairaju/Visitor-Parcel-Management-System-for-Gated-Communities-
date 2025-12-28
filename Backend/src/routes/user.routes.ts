@@ -4,8 +4,7 @@ import { RowDataPacket } from 'mysql2';
 
 const router = Router();
 
-// Get all users (admin only)
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(
       'SELECT id, name, email, role, contact_info, flat_number, created_at FROM users ORDER BY created_at DESC'
@@ -17,8 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// Get all residents (for security guard dropdown)
-router.get('/residents', async (req: Request, res: Response) => {
+router.get('/residents', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(
       'SELECT id, name, flat_number, contact_info FROM users WHERE role = ? ORDER BY flat_number',
@@ -31,7 +29,6 @@ router.get('/residents', async (req: Request, res: Response) => {
   }
 });
 
-// Get user by ID
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -51,8 +48,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Get dashboard stats (admin)
-router.get('/stats/dashboard', async (req: Request, res: Response) => {
+router.get('/stats/dashboard', async (_req: Request, res: Response) => {
   try {
     const [userCount] = await pool.execute<RowDataPacket[]>('SELECT COUNT(*) as count FROM users');
     const [visitorCount] = await pool.execute<RowDataPacket[]>("SELECT COUNT(*) as count FROM visitors_parcels WHERE type = 'visitor'");

@@ -4,7 +4,6 @@ import { RowDataPacket } from 'mysql2';
 
 const router = Router();
 
-// Login
 router.post('/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -40,7 +39,6 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
-// Signup
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const { name, email, password, role, contactInfo, flatNumber } = req.body;
@@ -49,7 +47,6 @@ router.post('/signup', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Name, email, password, and role are required' });
     }
 
-    // Check if email exists
     const [existing] = await pool.execute<RowDataPacket[]>(
       'SELECT id FROM users WHERE email = ?',
       [email]
@@ -59,7 +56,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       return res.status(409).json({ error: 'Email already exists' });
     }
 
-    const [result] = await pool.execute(
+    await pool.execute(
       'INSERT INTO users (name, email, password, role, contact_info, flat_number) VALUES (?, ?, ?, ?, ?, ?)',
       [name, email, password, role, contactInfo || null, flatNumber || null]
     );

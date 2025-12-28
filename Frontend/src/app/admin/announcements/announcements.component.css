@@ -6,7 +6,6 @@
   min-height: 100vh;
 }
 
-/* Header */
 .page-header {
   margin-bottom: 28px;
 }
@@ -31,7 +30,7 @@
   margin: 8px 0 0;
 }
 
-/* Stats */
+
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -87,7 +86,7 @@
   font-weight: 500;
 }
 
-/* Main Grid */
+
 .main-grid {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -95,7 +94,7 @@
   align-items: start;
 }
 
-/* Form Section */
+
 .form-section {
   background: #fff;
   border-radius: 16px;
@@ -161,7 +160,7 @@
   border-radius: 10px;
 }
 
-/* List Section */
+
 .list-section {
   background: #fff;
   border-radius: 16px;
@@ -186,7 +185,7 @@
   font-size: 16px;
 }
 
-/* Announcements List */
+
 .announcements-list {
   padding: 20px;
   display: flex;
@@ -196,7 +195,7 @@
   overflow-y: auto;
 }
 
-/* Card */
+
 .card {
   background: #fff;
   border-radius: 14px;
@@ -348,13 +347,13 @@
   overflow: hidden;
 }
 
-.card-meta {
+.card-info {
   display: flex;
   gap: 20px;
   padding-top: 14px;
   border-top: 1px solid #e2e8f0;
 }
-.card-meta span {
+.card-info span {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -362,14 +361,14 @@
   color: #64748b;
   font-weight: 500;
 }
-.card-meta mat-icon {
+.card-info mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
   color: #94a3b8;
 }
 
-/* Scrollbar */
+
 .announcements-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -385,7 +384,7 @@
   background: #94a3b8;
 }
 
-/* Responsive */
+
 @media (max-width: 900px) {
   .main-grid {
     grid-template-columns: 1fr;
@@ -404,7 +403,7 @@
   .form-row {
     grid-template-columns: 1fr;
   }
-  .card-meta {
+  .card-info {
     flex-direction: column;
     gap: 8px;
   }

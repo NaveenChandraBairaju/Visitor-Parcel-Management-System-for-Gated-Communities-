@@ -10,7 +10,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-visitor-log',
@@ -21,7 +20,7 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule, MatSnackBarModule
   ],
   templateUrl: './visitor-log.component.html',
-  styleUrl: './visitor-log.component.css'
+  styleUrls: ['./visitor-log.component.css']
 })
 export class VisitorLogComponent implements OnInit {
   visitor = { name: '', phone: '', purpose: '', residentId: 0, vehicleNumber: '' };
@@ -33,7 +32,6 @@ export class VisitorLogComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -64,6 +62,12 @@ export class VisitorLogComponent implements OnInit {
       this.visitor.purpose &&
       this.visitor.residentId
     );
+  }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '').substring(0, 10);
+    this.visitor.phone = input.value;
   }
 
   submitVisitor() {

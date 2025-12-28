@@ -4,7 +4,6 @@ import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 const router = Router();
 
-// Get all pre-approved visitors (for security) - active ones
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(`
@@ -21,7 +20,6 @@ router.get('/', async (_req: Request, res: Response) => {
   }
 });
 
-// Get all pre-approved visitors history (including exited)
 router.get('/history', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(`
@@ -37,7 +35,6 @@ router.get('/history', async (_req: Request, res: Response) => {
   }
 });
 
-// Get pre-approved visitors by resident
 router.get('/resident/:residentId', async (req: Request, res: Response) => {
   try {
     const { residentId } = req.params;
@@ -53,7 +50,6 @@ router.get('/resident/:residentId', async (req: Request, res: Response) => {
   }
 });
 
-// Add pre-approved visitor
 router.post('/', async (req: Request, res: Response) => {
   try {
     const { residentId, name, phone, purpose, expectedDate, vehicleNumber } = req.body;
@@ -75,7 +71,6 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// Update pre-approved status
 router.patch('/:id/status', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -97,7 +92,6 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
   }
 });
 
-// Delete pre-approved visitor
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

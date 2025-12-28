@@ -4,8 +4,7 @@ import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 const router = Router();
 
-// Get all parcels
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(`
       SELECT vp.*, u.name as resident_name, u.flat_number, sg.name as guard_name
@@ -22,7 +21,6 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// Get parcels by resident
 router.get('/resident/:residentId', async (req: Request, res: Response) => {
   try {
     const { residentId } = req.params;
@@ -40,7 +38,6 @@ router.get('/resident/:residentId', async (req: Request, res: Response) => {
   }
 });
 
-// Log new parcel
 router.post('/', async (req: Request, res: Response) => {
   try {
     const { residentId, securityGuardId, name, description, media } = req.body;
@@ -62,7 +59,6 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// Update parcel status
 router.patch('/:id/status', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -73,16 +69,30 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
-    if (notes) {
-      await pool.execute(
-        'UPDATE visitors_parcels SET status = ?, notes = ? WHERE id = ? AND type = ?',
-        [status, notes, id, 'parcel']
-      );
+    if (status === 'Exited') {
+      if (notes) {
+        await pool.execute(
+          'UPDATE visitors_parcels SET status = ?, notes = ?, exit_time = NOW() WHERE id = ? AND type = ?',
+          [status, notes, id, 'parcel']
+        );
+      } else {
+        await pool.execute(
+          'UPDATE visitors_parcels SET status = ?, exit_time = NOW() WHERE id = ? AND type = ?',
+          [status, id, 'parcel']
+        );
+      }
     } else {
-      await pool.execute(
-        'UPDATE visitors_parcels SET status = ? WHERE id = ? AND type = ?',
-        [status, id, 'parcel']
-      );
+      if (notes) {
+        await pool.execute(
+          'UPDATE visitors_parcels SET status = ?, notes = ? WHERE id = ? AND type = ?',
+          [status, notes, id, 'parcel']
+        );
+      } else {
+        await pool.execute(
+          'UPDATE visitors_parcels SET status = ? WHERE id = ? AND type = ?',
+          [status, id, 'parcel']
+        );
+      }
     }
 
     res.json({ message: 'Parcel status updated successfully' });
@@ -92,7 +102,6 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
   }
 });
 
-// Get recent parcel history
 router.get('/history/recent', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(`

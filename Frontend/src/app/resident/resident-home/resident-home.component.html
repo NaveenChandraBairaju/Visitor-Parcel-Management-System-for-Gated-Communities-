@@ -1,5 +1,4 @@
 <div class="resident-home">
-  <!-- Welcome Section -->
   <div class="welcome-section">
     <div class="welcome-text">
       <h1>Welcome back, {{userName}}! 👋</h1>
@@ -10,7 +9,6 @@
     </div>
   </div>
 
-  <!-- Stats Cards -->
   <div class="stats-row">
     <div class="stat-card pending">
       <mat-icon>hourglass_empty</mat-icon>
@@ -35,7 +33,6 @@
     </div>
   </div>
 
-  <!-- Quick Actions -->
   <h2>Quick Actions</h2>
   <div class="actions-grid">
     <a routerLink="/resident/visitor-approval" class="action-card">
@@ -64,7 +61,6 @@
     </a>
   </div>
 
-  <!-- Announcements Section -->
   @if (announcements.length > 0) {
     <h2><mat-icon>campaign</mat-icon> Announcements</h2>
     <div class="announcements-section">
@@ -80,7 +76,7 @@
             }
           </div>
           <p class="announcement-message">{{announcement.message}}</p>
-          <div class="announcement-meta">
+          <div class="announcement-info">
             <span><mat-icon>calendar_today</mat-icon> {{announcement.created_at | date:'short'}}</span>
           </div>
         </div>
@@ -88,7 +84,6 @@
     </div>
   }
 
-  <!-- Recent History -->
   @if (recentVisitors.length > 0 || recentParcels.length > 0) {
     <h2><mat-icon>history</mat-icon> Recent History</h2>
     <div class="history-grid">

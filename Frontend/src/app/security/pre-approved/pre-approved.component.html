@@ -15,12 +15,7 @@
     <table mat-table [dataSource]="preApprovedList">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Visitor Name</th>
-        <td mat-cell *matCellDef="let v">
-          <div class="visitor-info">
-            <mat-icon>verified_user</mat-icon>
-            <span>{{v.name}}</span>
-          </div>
-        </td>
+        <td mat-cell *matCellDef="let v">{{v.name}}</td>
       </ng-container>
       <ng-container matColumnDef="phone">
         <th mat-header-cell *matHeaderCellDef>Phone</th>
@@ -73,13 +68,11 @@
 
     @if (preApprovedList.length === 0) {
       <div class="empty-state">
-        <mat-icon>verified_user</mat-icon>
         <p>No pre-approved visitors at the moment</p>
       </div>
     }
   </div>
 
-  <!-- History Section -->
   @if (historyList.length > 0) {
     <div class="table-card history-card">
       <h2><mat-icon>history</mat-icon> Recent History</h2>

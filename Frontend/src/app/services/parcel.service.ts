@@ -12,7 +12,6 @@ export interface Parcel {
   receivedTime: string;
   status: 'Pending' | 'Approved' | 'Rejected' | 'Acknowledged' | 'Collected';
   description?: string;
-  // Delivery person tracking
   deliveryPersonName?: string;
   deliveryPersonPhone?: string;
   deliveryPersonArrived?: string;
@@ -54,7 +53,6 @@ export class ParcelService {
     return newParcel;
   }
 
-  // Security marks delivery person as left
   markDeliveryPersonLeft(id: number) {
     const current = this.parcels.value;
     const now = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -62,7 +60,6 @@ export class ParcelService {
     this.parcels.next(updated);
   }
 
-  // Resident approves parcel
   approveParcel(id: number) {
     const parcel = this.parcels.value.find(p => p.id === id);
     if (parcel) {
@@ -71,7 +68,6 @@ export class ParcelService {
     this.updateStatus(id, 'Approved');
   }
 
-  // Resident rejects parcel
   rejectParcel(id: number) {
     const parcel = this.parcels.value.find(p => p.id === id);
     if (parcel) {
@@ -80,12 +76,10 @@ export class ParcelService {
     this.updateStatus(id, 'Rejected');
   }
 
-  // Resident acknowledges (ready to collect)
   acknowledgeParcel(id: number) {
     this.updateStatus(id, 'Acknowledged');
   }
 
-  // Resident collected
   collectParcel(id: number) {
     const parcel = this.parcels.value.find(p => p.id === id);
     if (parcel) {

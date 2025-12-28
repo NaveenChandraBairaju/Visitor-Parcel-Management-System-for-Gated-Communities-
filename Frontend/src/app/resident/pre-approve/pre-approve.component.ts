@@ -22,7 +22,7 @@ import { ApiService } from '../../services/api.service';
     MatDatepickerModule, MatNativeDateModule, MatSnackBarModule
   ],
   templateUrl: './pre-approve.component.html',
-  styleUrl: './pre-approve.component.css'
+  styleUrls: ['./pre-approve.component.css']
 })
 export class PreApproveComponent implements OnInit {
   visitor = { name: '', phone: '', purpose: '', expectedDate: null as Date | null, vehicleNumber: '' };
@@ -57,6 +57,12 @@ export class PreApproveComponent implements OnInit {
       this.visitor.purpose &&
       this.visitor.expectedDate
     );
+  }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '').substring(0, 10);
+    this.visitor.phone = input.value;
   }
 
   submitPreApproval() {

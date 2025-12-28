@@ -19,10 +19,10 @@ import { ApiService } from '../../services/api.service';
     MatTableModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule
   ],
   templateUrl: './all-visitors.component.html',
-  styleUrl: './all-visitors.component.css'
+  styleUrls: ['./all-visitors.component.css']
 })
 export class AllVisitorsComponent implements OnInit {
-  displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'checkIn', 'status', 'actions'];
+  displayedColumns = ['name', 'phone', 'purpose', 'flatNumber', 'checkIn', 'exitTime', 'status', 'actions'];
   visitors: any[] = [];
   recentHistory: any[] = [];
   searchQuery = '';

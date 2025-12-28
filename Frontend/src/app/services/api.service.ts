@@ -10,7 +10,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Auth
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/auth/login`, { email, password });
   }
@@ -19,7 +18,6 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/auth/signup`, userData);
   }
 
-  // Users
   getResidents(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/users/residents`);
   }
@@ -32,7 +30,6 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}/users/stats/dashboard`);
   }
 
-  // Visitors
   getAllVisitors(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/visitors`);
   }
@@ -53,7 +50,6 @@ export class ApiService {
     return this.http.patch(`${this.baseUrl}/visitors/${id}/status`, { status, notes });
   }
 
-  // Parcels
   getAllParcels(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/parcels`);
   }
@@ -70,7 +66,6 @@ export class ApiService {
     return this.http.patch(`${this.baseUrl}/parcels/${id}/status`, { status, notes });
   }
 
-  // Pre-Approved Visitors
   getAllPreApproved(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/preapprove`);
   }
@@ -95,7 +90,6 @@ export class ApiService {
     return this.http.delete(`${this.baseUrl}/preapprove/${id}`);
   }
 
-  // Announcements
   getAllAnnouncements(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/announcements`);
   }
@@ -112,12 +106,32 @@ export class ApiService {
     return this.http.delete(`${this.baseUrl}/announcements/${id}`);
   }
 
-  // Recent History
   getRecentVisitorHistory(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/visitors/history/recent`);
   }
 
   getRecentParcelHistory(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/parcels/history/recent`);
+  }
+
+  // Frequent Visitors
+  getAllFrequentVisitors(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/frequent-visitors`);
+  }
+
+  getFrequentVisitorsByResident(residentId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/frequent-visitors/resident/${residentId}`);
+  }
+
+  searchFrequentVisitors(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/frequent-visitors/search?query=${query}`);
+  }
+
+  addFrequentVisitor(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/frequent-visitors`, data);
+  }
+
+  deleteFrequentVisitor(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/frequent-visitors/${id}`);
   }
 }

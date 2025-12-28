@@ -29,7 +29,7 @@ import { ApiService } from '../../services/api.service';
     MatSnackBarModule
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
   fullName = '';
@@ -65,7 +65,6 @@ export class SignupComponent {
       this.agreeTerms
     );
     
-    // Flat number required only for residents
     if (this.role === 'resident') {
       return baseValid && !!this.flatNumber.trim();
     }
@@ -74,6 +73,12 @@ export class SignupComponent {
 
   isValidEmail(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '').substring(0, 10);
+    this.phone = input.value;
   }
 
   signup() {

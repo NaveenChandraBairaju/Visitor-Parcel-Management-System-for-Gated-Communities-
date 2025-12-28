@@ -64,8 +64,11 @@
               </button>
             </div>
           }
-          @if (v.status === 'Entered' || v.status === 'Approved') {
-            <span class="approved-text"><mat-icon>check_circle</mat-icon> Approved</span>
+          @if (v.status === 'Approved') {
+            <span class="waiting-text"><mat-icon>schedule</mat-icon> Waiting for Entry</span>
+          }
+          @if (v.status === 'Entered') {
+            <span class="approved-text"><mat-icon>check_circle</mat-icon> Inside</span>
           }
           @if (v.status === 'Rejected') {
             <span class="rejected-text"><mat-icon>cancel</mat-icon> Rejected</span>

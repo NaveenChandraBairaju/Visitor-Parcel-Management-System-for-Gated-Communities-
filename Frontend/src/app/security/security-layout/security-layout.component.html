@@ -1,5 +1,4 @@
 <div class="layout-container">
-  <!-- Top Navbar -->
   <nav class="top-navbar security-nav">
     <div class="nav-left">
       <div class="brand">
@@ -32,6 +31,10 @@
         <mat-icon>verified_user</mat-icon>
         Pre-Approved
       </a>
+      <a routerLink="/security/frequent-visitors" routerLinkActive="active" mat-button>
+        <mat-icon>people</mat-icon>
+        Frequent
+      </a>
     </div>
     <div class="nav-right">
       <button mat-icon-button [matMenuTriggerFor]="userMenu">
@@ -45,7 +48,6 @@
     </div>
   </nav>
 
-  <!-- Content -->
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>

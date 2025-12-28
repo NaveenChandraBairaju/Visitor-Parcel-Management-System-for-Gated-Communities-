@@ -15,7 +15,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Phone Number</mat-label>
-        <input matInput [(ngModel)]="visitor.phone" placeholder="Enter 10-digit phone" maxlength="10" required>
+        <input matInput [(ngModel)]="visitor.phone" placeholder="Enter 10-digit phone" (input)="onPhoneInput($event)" maxlength="10" required>
         @if (visitor.phone && visitor.phone.length > 0 && visitor.phone.length < 10) {
           <mat-hint class="error-hint">Phone must be 10 digits ({{visitor.phone.length}}/10)</mat-hint>
         }

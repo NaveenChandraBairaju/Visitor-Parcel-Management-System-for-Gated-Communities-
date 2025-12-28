@@ -4,7 +4,6 @@ import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 const router = Router();
 
-// Get all announcements
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const [rows] = await pool.execute<RowDataPacket[]>(`
@@ -20,7 +19,6 @@ router.get('/', async (_req: Request, res: Response) => {
   }
 });
 
-// Get announcements by audience (for residents/security)
 router.get('/audience/:audience', async (req: Request, res: Response) => {
   try {
     const { audience } = req.params;
@@ -38,7 +36,6 @@ router.get('/audience/:audience', async (req: Request, res: Response) => {
   }
 });
 
-// Create announcement (admin only)
 router.post('/', async (req: Request, res: Response) => {
   try {
     const { title, message, audience, priority, createdBy } = req.body;
@@ -60,7 +57,6 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// Delete announcement
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

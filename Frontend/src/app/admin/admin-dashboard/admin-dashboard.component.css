@@ -3,7 +3,7 @@
   margin: 0 auto;
 }
 
-/* Welcome Section */
+
 .welcome-section {
   display: flex;
   justify-content: space-between;
@@ -33,7 +33,7 @@
   opacity: 0.3;
 }
 
-/* Stats Row */
+
 .stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -78,7 +78,7 @@
   color: #64748b;
 }
 
-/* Quick Actions */
+
 h2 {
   font-size: 24px;
   color: #1e3a5f;
@@ -146,7 +146,6 @@ h2 {
   font-weight: 600;
 }
 
-/* Bottom Section */
 .bottom-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -164,7 +163,7 @@ h2 {
   margin-bottom: 16px;
 }
 
-/* Alerts */
+
 .alerts-list {
   display: flex;
   flex-direction: column;
@@ -208,7 +207,7 @@ h2 {
   color: #94a3b8;
 }
 
-/* Activity List */
+
 .activity-list {
   display: flex;
   flex-direction: column;

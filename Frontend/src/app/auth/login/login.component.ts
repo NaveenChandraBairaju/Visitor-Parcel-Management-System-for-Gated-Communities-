@@ -114,7 +114,6 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         const user = response.user;
         
-        // Validate role matches selected portal
         if (user.role !== this.role) {
           this.errorMessage = `Invalid credentials. This account is for ${user.role} portal.`;
           this.isLoading = false;
@@ -146,7 +145,6 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('userFlat', userData.flatNumber);
     localStorage.setItem('userData', JSON.stringify(userData));
 
-    // Refresh auth service state
     this.authService.refreshUser();
 
     switch (userData.role) {

@@ -21,12 +21,10 @@ export class FrequentVisitorService {
 
   frequentVisitors$ = this.frequentVisitors.asObservable();
 
-  // Get frequent visitors for a specific flat
   getForFlat(flatNumber: string): FrequentVisitor[] {
     return this.frequentVisitors.value.filter(v => v.flatNumber === flatNumber);
   }
 
-  // Add new frequent visitor
   addFrequentVisitor(visitor: Partial<FrequentVisitor>): FrequentVisitor {
     const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const newVisitor: FrequentVisitor = {
@@ -42,20 +40,17 @@ export class FrequentVisitorService {
     return newVisitor;
   }
 
-  // Remove frequent visitor
   removeFrequentVisitor(id: number) {
     const updated = this.frequentVisitors.value.filter(v => v.id !== id);
     this.frequentVisitors.next(updated);
   }
 
-  // Check if visitor is in frequent list (by phone)
   isFrequentVisitor(phone: string, flatNumber: string): FrequentVisitor | undefined {
     return this.frequentVisitors.value.find(
       v => v.phone === phone && v.flatNumber === flatNumber
     );
   }
 
-  // Increment visit count when visitor enters
   recordVisit(phone: string, flatNumber: string) {
     const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const updated = this.frequentVisitors.value.map(v => {

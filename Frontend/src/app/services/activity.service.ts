@@ -32,22 +32,18 @@ export class ActivityService {
       date: 'Today'
     };
     
-    // Add to beginning, keep max 50 activities
     const current = this.activities.value;
     this.activities.next([activity, ...current].slice(0, 50));
   }
 
-  // Get activities for a specific flat (for residents)
   getForFlat(flatNumber: string): Activity[] {
     return this.activities.value.filter(a => a.flatNumber === flatNumber);
   }
 
-  // Get all activities (for security/admin)
   getAll(): Activity[] {
     return this.activities.value;
   }
 
-  // Get recent activities (limit)
   getRecent(limit: number = 5, flatNumber?: string): Activity[] {
     let list = this.activities.value;
     if (flatNumber) {

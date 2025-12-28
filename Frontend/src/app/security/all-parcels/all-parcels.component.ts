@@ -19,10 +19,10 @@ import { ApiService } from '../../services/api.service';
     MatTableModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule
   ],
   templateUrl: './all-parcels.component.html',
-  styleUrl: './all-parcels.component.css'
+  styleUrls: ['./all-parcels.component.css']
 })
 export class AllParcelsComponent implements OnInit {
-  displayedColumns = ['courier', 'name', 'flatNumber', 'receivedDate', 'status', 'actions'];
+  displayedColumns = ['courier', 'name', 'flatNumber', 'receivedDate', 'exitTime', 'status', 'actions'];
   parcels: any[] = [];
   recentHistory: any[] = [];
   searchQuery = '';

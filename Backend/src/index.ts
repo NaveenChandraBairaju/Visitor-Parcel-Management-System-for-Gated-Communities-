@@ -8,6 +8,7 @@ import parcelRoutes from './routes/parcel.routes';
 import userRoutes from './routes/user.routes';
 import preapproveRoutes from './routes/preapprove.routes';
 import announcementRoutes from './routes/announcement.routes';
+import frequentVisitorRoutes from './routes/frequent-visitor.routes';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api/parcels', parcelRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/preapprove', preapproveRoutes);
 app.use('/api/announcements', announcementRoutes);
+app.use('/api/frequent-visitors', frequentVisitorRoutes);
 
 // Health check with database connection test
 app.get('/api/health', async (_req, res) => {
@@ -53,4 +55,5 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Health API: http://localhost:${PORT}/api/health`);
 });

@@ -33,17 +33,24 @@
 
 .nav-center {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .nav-center a {
   color: #fff;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 6px 10px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   font-weight: 500;
+  font-size: 12px;
+}
+
+.nav-center a mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .nav-center a:hover {

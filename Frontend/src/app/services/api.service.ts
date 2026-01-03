@@ -18,6 +18,10 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/auth/signup`, userData);
   }
 
+  googleLogin(email: string, name: string, googleId: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/google-login`, { email, name, googleId });
+  }
+
   getResidents(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/users/residents`);
   }

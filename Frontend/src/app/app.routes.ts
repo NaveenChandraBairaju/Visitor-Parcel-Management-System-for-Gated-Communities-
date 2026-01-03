@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/signup/signup.component').then(m => m.SignupComponent)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
     path: 'unauthorized',
     loadComponent: () => import('./auth/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
@@ -111,6 +115,10 @@ export const routes: Routes = [
       {
         path: 'announcements',
         loadComponent: () => import('./admin/announcements/announcements.component').then(m => m.AnnouncementsComponent)
+      },
+      {
+        path: 'frequent-visitors',
+        loadComponent: () => import('./security/frequent-visitors/frequent-visitors.component').then(m => m.SecurityFrequentVisitorsComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

@@ -52,11 +52,19 @@
       <button type="button" class="login-btn" (click)="login()">
         Sign In <mat-icon>arrow_forward</mat-icon>
       </button>
-    </form>
 
-    <p class="signup-link">
-      Don't have an account? <a routerLink="/signup">Create one</a>
-    </p>
+      <a routerLink="/forgot-password" class="forgot-link">Forgot Password?</a>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <div id="google-btn" class="google-btn-container"></div>
+
+      <p class="signup-link">
+        Don't have an account? <a routerLink="/signup">Create one</a>
+      </p>
+    </form>
   </div>
 
   <div class="login-right">

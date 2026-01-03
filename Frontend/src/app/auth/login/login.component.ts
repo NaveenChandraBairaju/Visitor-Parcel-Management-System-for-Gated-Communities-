@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
+
+declare var google: any;
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -26,7 +29,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private snackBar: MatSnackBar,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
@@ -34,6 +39,56 @@ export class LoginComponent implements OnInit {
       if (params['role']) {
         this.role = params['role'];
       }
+    });
+
+    // Initialize Google Sign-In
+    this.initGoogleSignIn();
+  }
+
+  initGoogleSignIn() {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id: '108946964772-lk97j94o20ifqd93s3hub9jug1niq8lo.apps.googleusercontent.com',
+        callback: (response: any) => this.handleGoogleSignIn(response)
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById('google-btn'),
+        { theme: 'outline', size: 'large', width: '100%', text: 'signin_with' }
+      );
+    }
+  }
+
+  handleGoogleSignIn(response: any) {
+    const credential = response.credential;
+    const payload = JSON.parse(atob(credential.split('.')[1]));
+
+    this.ngZone.run(() => {
+      this.apiService.googleLogin(payload.email, payload.name, payload.sub).subscribe({
+        next: (res) => {
+          const user = res.user;
+          
+          // Check if user role matches selected portal
+          if (user.role !== this.role) {
+            this.errorMessage = `This Google account is registered as ${user.role}. Please use the ${user.role} portal.`;
+            this.snackBar.open(`Access denied. Use ${user.role} portal.`, 'Close', { duration: 4000 });
+            return;
+          }
+          
+          this.setUserAndNavigate({
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            flatNumber: user.flatNumber || '',
+            role: user.role,
+            contactInfo: user.contactInfo
+          });
+          this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
+        },
+        error: (err) => {
+          this.snackBar.open(err.error?.error || 'Google login failed', 'Close', { duration: 3000 });
+        }
+      });
     });
   }
 
